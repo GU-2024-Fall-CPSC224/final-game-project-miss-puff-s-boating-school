@@ -10,6 +10,8 @@ public class Board extends JPanel {
     private int gridCellSize;
     private int boardSize;
 
+    public Ship ghostShip;
+
     public Board(edu.gonzaga.Board board) {
         super();
 
@@ -26,8 +28,10 @@ public class Board extends JPanel {
         boardSize = gridCellSize * 11;
 
         for (Ship ship : board.ships) {
-            drawShip(g, ship.getX() + 1, ship.getY() + 1, ship.isVertical(), ship.getLength());
+            drawShip(g, Color.GRAY, ship.getX() + 1, ship.getY() + 1, ship.isVertical(), ship.getLength());
         }
+
+        drawGhostShip(g);
 
         drawGrid(g);
 
@@ -38,6 +42,10 @@ public class Board extends JPanel {
                 }
             }
         }
+    }
+
+    public int getGridCellSize() {
+        return gridCellSize;
     }
 
     private void drawGrid(Graphics g) {
@@ -62,14 +70,45 @@ public class Board extends JPanel {
         }
     }
 
-    private void drawShip(Graphics g, int x, int y, boolean vertical, int length) {
-        g.setColor(Color.GRAY);
+    private void drawShip(Graphics g, Color color, int x, int y, boolean vertical, int length) {
+        g.setColor(color);
 
         if (vertical) {
             g.fillRect(x * gridCellSize, y * gridCellSize, gridCellSize, gridCellSize * length);
         } else {
             g.fillRect(x * gridCellSize, y * gridCellSize, gridCellSize * length, gridCellSize);
         }
+    }
+
+    private void drawGhostShip(Graphics g) {
+        if (ghostShip == null) {
+            return;
+        }
+
+        // Would the ship be within the bounds of the board?
+        Color drawColor = Color.GREEN;
+
+        if (ghostShip.isVertical()) {
+            if (ghostShip.getY() + ghostShip.getLength() > 10) {
+                drawColor = Color.RED;
+            }
+
+
+        } else {
+            if (ghostShip.getX() + ghostShip.getLength() > 10) {
+                drawColor = Color.RED;
+            }
+        }
+
+        if (ghostShip.getX() < 0 || ghostShip.getX() > 9) {
+            drawColor = Color.RED;
+        }
+
+        if (ghostShip.getY() < 0 || ghostShip.getY() > 9) {
+            drawColor = Color.RED;
+        }
+
+        drawShip(g, drawColor, ghostShip.getX() + 1, ghostShip.getY() + 1, ghostShip.isVertical(), ghostShip.getLength());
     }
 
     private void drawMarker(Graphics g, int x, int y, boolean hit) {

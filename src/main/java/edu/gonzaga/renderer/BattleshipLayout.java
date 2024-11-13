@@ -5,8 +5,8 @@ import java.awt.*;
 public class BattleshipLayout implements LayoutManager {
     private Component leftBoard;
     private Component rightBoard;
-    private Component leftSunkShips;
-    private Component rightSunkShips;
+    private Component leftShips;
+    private Component rightShips;
     private Component info;
 
     @Override
@@ -18,11 +18,11 @@ public class BattleshipLayout implements LayoutManager {
             case "rightBoard":
                 rightBoard = comp;
                 break;
-            case "leftSunkShips":
-                leftSunkShips = comp;
+            case "leftShips":
+                leftShips = comp;
                 break;
-            case "rightSunkShips":
-                rightSunkShips = comp;
+            case "rightShips":
+                rightShips = comp;
                 break;
             case "info":
                 info = comp;
@@ -54,8 +54,8 @@ public class BattleshipLayout implements LayoutManager {
         leftBoard.setBounds(insets.left, insets.top, gridSize, gridSize);
         rightBoard.setBounds(width - gridSize - insets.right, insets.top, gridSize, gridSize);
 
-        leftSunkShips.setBounds(insets.left, insets.top + gridSize, gridSize, height - gridSize);
-        rightSunkShips.setBounds(width - gridSize - insets.right, insets.top + gridSize, gridSize, height - gridSize);
+        leftShips.setBounds(insets.left, insets.top + gridSize, gridSize, height - gridSize);
+        rightShips.setBounds(width - gridSize - insets.right, insets.top + gridSize, gridSize, height - gridSize);
 
         info.setBounds(insets.left + gridSize, insets.top, width - gridSize * 2, height);
     }
