@@ -33,6 +33,13 @@ public class Board {
         markers = new boolean[BOARD_SIZE][BOARD_SIZE];
     }
 
+    /**
+     * Returns an array of ships on the board.
+     */
+    public Ship[] getShips() {
+        return shipList.toArray(new Ship[0]);
+    }
+
 
     /**
      * isMarked() checks a player-specified space for a marker.
