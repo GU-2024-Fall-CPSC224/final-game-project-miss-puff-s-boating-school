@@ -19,12 +19,14 @@ public class Ships extends JScrollPane {
         container.setLayout(new GridLayout(0, 1, 0, 10));
         container.setBackground(Color.BLACK);
 
-        for (edu.gonzaga.Ship ship : board.ships) {
+        for (edu.gonzaga.Ship ship : board.getShips()) {
             ShipCard card = new ShipCard(ship);
             container.add(card);
         }
 
-        container.setPreferredSize(new Dimension(0, board.ships.size() * 70 + (board.ships.size() - 1) * 10));
+        int numShips = board.getShips().length;
+
+        container.setPreferredSize(new Dimension(0, numShips * 70 + (numShips - 1) * 10));
 
         setViewportView(container);
     }

@@ -2,7 +2,6 @@ package edu.gonzaga.renderer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 /**
  * Represents the window in which the game is displayed.

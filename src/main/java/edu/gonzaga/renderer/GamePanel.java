@@ -6,10 +6,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements PropertyChangeListener {
     private edu.gonzaga.Board leftBoardModel;
     private edu.gonzaga.Board rightBoardModel;
+
+    private boolean leftTurn = true;
 
     private Board leftBoard;
     private Board rightBoard;
@@ -71,24 +75,23 @@ public class GamePanel extends JPanel {
         setOpaque(true);
     }
 
+    public void setPlayerTurn(boolean leftTurn) {
+        this.leftTurn = leftTurn;
+    }
+
     private void onMouseClicked(MouseEvent e) {
     }
 
     private void onMouseMoved(MouseEvent e) {
-        Point mousePos = rightBoard.getMousePosition();
-
-        if (mousePos == null) {
-            rightBoard.ghostShip = null;
-        } else {
-            int x = mousePos.x / rightBoard.getGridCellSize() - 1;
-            int y = mousePos.y / rightBoard.getGridCellSize() - 1;
-
-            rightBoard.ghostShip = new edu.gonzaga.GenericShip(x, y, true, 5);
-        }
-
+        leftBoard.repaint();
         rightBoard.repaint();
     }
 
     private void onKeyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+
     }
 }
