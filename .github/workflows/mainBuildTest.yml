@@ -31,7 +31,7 @@ jobs:
     name: "Build Main Project Game Source"
     runs-on: [self-hosted, linux, CPSC224]
     container: 
-      image: maven:3.9.9-eclipse-temurin-11
+      image: maven:3.9.9-eclipse-temurin-17
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -55,7 +55,7 @@ jobs:
     needs: build
     runs-on: [self-hosted, linux, CPSC224]
     container: 
-      image: maven:3.9.9-eclipse-temurin-11
+      image: maven:3.9.9-eclipse-temurin-17
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -74,7 +74,7 @@ jobs:
     needs: build
     runs-on: [self-hosted, linux, CPSC224]
     container: 
-      image: maven:3.9.9-eclipse-temurin-11
+      image: maven:3.9.9-eclipse-temurin-17
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -93,7 +93,7 @@ jobs:
     needs: build
     runs-on: [self-hosted, linux, CPSC224]
     container: 
-      image: maven:3.9.9-eclipse-temurin-11
+      image: maven:3.9.9-eclipse-temurin-17
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -113,7 +113,7 @@ jobs:
     needs: [build]
     runs-on: [self-hosted, linux, CPSC224]
     container: 
-      image: maven:3.9.9-eclipse-temurin-11
+      image: maven:3.9.9-eclipse-temurin-17
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
@@ -137,7 +137,7 @@ jobs:
     needs: [unit-test]
     runs-on: [self-hosted, linux, CPSC224]
     container: 
-      image: maven:3.9.9-eclipse-temurin-11
+      image: maven:3.9.9-eclipse-temurin-17
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
