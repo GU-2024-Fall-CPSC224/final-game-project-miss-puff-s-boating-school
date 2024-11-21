@@ -42,6 +42,7 @@ public class GameFrame extends JFrame {
             remove(activePanel);
             activePanel = panel;
             add(activePanel, BorderLayout.CENTER);
+            revalidate();
         }
 
     }

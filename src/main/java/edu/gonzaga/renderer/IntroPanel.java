@@ -14,11 +14,11 @@ public class IntroPanel extends JPanel {
     }
 
     private void start() {
-        System.out.println("Starting game");
+        firePropertyChange("start", null, null);
     }
 
     private void settings() {
-        System.out.println("Opening settings");
+        firePropertyChange("settings", null, null);
     }
 
     private void quit() {

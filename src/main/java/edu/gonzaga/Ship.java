@@ -19,7 +19,7 @@ public abstract class Ship {
     private final boolean isVertical;
 
 
-    enum shipType {
+    public enum shipType {
         CARRIER,
         BATTLE,
         SUB,

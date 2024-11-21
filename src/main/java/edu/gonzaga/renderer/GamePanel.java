@@ -1,5 +1,7 @@
 package edu.gonzaga.renderer;
 
+import edu.gonzaga.Ship;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -77,6 +79,10 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
     public void setPlayerTurn(boolean leftTurn) {
         this.leftTurn = leftTurn;
+    }
+
+    public void placeShip(boolean player1, Ship.shipType type, int length, PlaceShipCallback callback) {
+
     }
 
     private void onMouseClicked(MouseEvent e) {

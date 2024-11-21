@@ -101,6 +101,7 @@ public class Board {
         if ( validateShipPlacement( newShip.getPosition(), newShip.isVertical(), newShip.getLength() ) == false ) {
             return;
         }
+
         // The placement of the ship is valid, add it to the list.
         shipList.add( newShip );
     }
@@ -124,11 +125,11 @@ public class Board {
         // Check ship placement:
         for (Coordinate coordinate : segmentCoordinates) {
             // Check X:
-            if ( ( coordinate.x() > 10 ) || (coordinate.x() < 1 ) ) {
+            if ( ( coordinate.x() > 9 ) || (coordinate.x() < 0 ) ) {
                 return false;
             }
             // Check Y:
-            if ( ( coordinate.y() > 10 ) || (coordinate.y() < 1 ) ) {
+            if ( ( coordinate.y() > 9 ) || (coordinate.y() < 0 ) ) {
                 return false;
             }
         }

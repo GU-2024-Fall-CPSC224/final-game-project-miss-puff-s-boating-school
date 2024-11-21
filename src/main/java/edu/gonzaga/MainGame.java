@@ -25,10 +25,20 @@ public class MainGame {
 
         javax.swing.SwingUtilities.invokeLater(() -> {
             GameFrame frame = new GameFrame();
-//            GamePanel panel = new GamePanel(leftBoard, rightBoard);
-            IntroPanel panel = new IntroPanel();
+//            IntroPanel introPanel = new IntroPanel();
 
-            frame.setActivePanel(panel);
+//            frame.setActivePanel(introPanel);
+//
+//            introPanel.addPropertyChangeListener("start", evt -> {
+//                GamePanel gamePanel = new GamePanel(leftBoard, rightBoard);
+//                frame.setActivePanel(gamePanel);
+//            });
+//
+//            introPanel.addPropertyChangeListener("settings", evt -> {
+//                System.out.println("Settings");
+//            });
+
+            frame.setActivePanel(new GamePanel(leftBoard, rightBoard));
         });
     }
 }
