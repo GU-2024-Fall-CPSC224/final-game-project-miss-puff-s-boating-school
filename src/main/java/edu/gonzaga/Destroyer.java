@@ -8,10 +8,17 @@ public class Destroyer extends Ship {
         super(x, y, isVertical);
     }
 
-    //use ability: one-shot enemy boat
-    public void powerShot(){
-        //user selects tile to shoot
-        //if its a hit, all other tiles occupied by that ship will be marked, and ship is sunk
+    
+    /**
+     * powerShot() sinks any shit it hits instantly, marking all spaces hit.
+     */
+    public void powerShot( Coordinate playerCoordinate, Board enemyBoard ) {
+        
+        // Check initial space:
+        if ( enemyBoard.isMarkerHit( playerCoordinate ) == true ) {
+
+            // Get the player's ship, their coordinates, and SINK THAT SUCKAH! ( using a for loop probably)
+        }
     }
 
     @Override
