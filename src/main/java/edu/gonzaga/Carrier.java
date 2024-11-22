@@ -16,12 +16,7 @@ public class Carrier extends Ship{
      */
     public int shipsInRow(int rowNum){
         int tileCount = 0;
-        /*for (tiles: row) {
-         * if (ship on tile && id != SUB){
-         * tileCount++
-         * }
-         * 
-        */
+        //call recon ability inside board class
         return tileCount;
         //note: does not return the exact location of the occupied spaces, just the total number in that row
     }

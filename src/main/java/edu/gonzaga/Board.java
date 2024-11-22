@@ -2,6 +2,8 @@ package edu.gonzaga;
 
 import java.util.ArrayList;
 
+import edu.gonzaga.Ship.shipType;
+
 
 
 public class Board {
@@ -119,12 +121,9 @@ public class Board {
             segmentCoordinates = ship.getAllCoordinates();
 
             // Compare each ssegment against the space being checked:
-            // If they are equal, return true.
+            // If they are equal, return ship
             for ( Coordinate checkingCoord : segmentCoordinates ) {
                 if ( checkingCoord.equals( tile) ) {
-
-                    // < ---- If we wnated to call isShipSunk anywhere, it would have to be here.
-
                     return ship;
                 }
             }
@@ -181,6 +180,24 @@ public class Board {
             hasShip = true;
         }
         return hasShip;
+    }
+    /** For the aircraft carrier to use their special ability
+     * 
+     * @param row row number to be searched by aircraft
+     * @return
+     */
+    public int aircraftReconAbility(int row){
+        int count = 0;
+        for (int i = 0; i < BOARD_SIZE; i++){ //check each tile in row
+            Coordinate lineSearch = new Coordinate(row, i);
+            if (isMarkerHit(lineSearch)){
+                if (getShip(lineSearch).getType() != shipType.SUB){ //except submarines
+                    //counts number of ships in given row
+                    count ++;
+                }
+            }
+        }
+        return count;
     }
 
 

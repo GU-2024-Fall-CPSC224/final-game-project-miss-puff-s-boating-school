@@ -18,6 +18,8 @@ public abstract class Ship {
      */ 
     private final boolean isVertical;
 
+    private boolean toggleAbility = false;
+
 
     enum shipType {
         CARRIER,
@@ -97,6 +99,13 @@ public abstract class Ship {
      */
     public Boolean getIsSunk() {
         return isSunk;
+    }
+
+    public boolean canUseAbility(){
+        return toggleAbility;
+    }
+    public void setAbilityUse(boolean toggle){
+        toggleAbility = toggle;
     }
 
 
