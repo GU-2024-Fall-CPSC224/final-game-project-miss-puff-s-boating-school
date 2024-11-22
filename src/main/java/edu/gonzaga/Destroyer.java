@@ -1,5 +1,7 @@
 package edu.gonzaga;
 
+import java.util.ArrayList;
+
 public class Destroyer extends Ship {
     private final int length = 2; 
     private shipType shipId = shipType.DESTROYER;
@@ -17,7 +19,16 @@ public class Destroyer extends Ship {
         // Check initial space:
         if ( enemyBoard.isMarkerHit( playerCoordinate ) == true ) {
 
-            // Get the player's ship, their coordinates, and SINK THAT SUCKAH! ( using a for loop probably)
+            // Get the enemy player ship hit.
+            Ship enemyShip = enemyBoard.getShip( playerCoordinate );
+            // Get all the coordinates from the enemy player's ship.
+            ArrayList<Coordinate> enemyShipCoordinates = new ArrayList<>();
+            enemyShipCoordinates = enemyShip.getAllCoordinates();
+
+            // Set all coordinate of the enemy ship to marked:
+            for ( Coordinate coordinate : enemyShipCoordinates ) {
+                enemyBoard.setMarked( coordinate );
+            }
         }
     }
 

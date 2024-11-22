@@ -118,12 +118,10 @@ public class Board {
             ArrayList<Coordinate> segmentCoordinates = new ArrayList<>();
             segmentCoordinates = ship.getAllCoordinates();
 
-            // Compare each ssegment against the space being checked:
+            // Compare each segment against the space being checked:
             // If they are equal, return true.
             for ( Coordinate checkingCoord : segmentCoordinates ) {
-                if ( checkingCoord.equals( tile) ) {
-
-                    // < ---- If we wnated to call isShipSunk anywhere, it would have to be here.
+                if ( checkingCoord.equals( tile ) ) {
 
                     return ship;
                 }
