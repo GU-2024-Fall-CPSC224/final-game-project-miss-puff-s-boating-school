@@ -61,7 +61,7 @@
                             <manifest>
                                 <addClasspath>true</addClasspath>
                                 <classpathPrefix>lib/</classpathPrefix>
-                                <mainClass>edu.gonzaga.MainGame</mainClass>
+                                <mainClass>edu.gonzaga.Main</mainClass>
                             </manifest>
                         </archive>
                     </configuration>
@@ -77,7 +77,7 @@
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>1.2.1</version>
                     <configuration>
-                        <mainClass>edu.gonzaga.MainGame</mainClass>
+                        <mainClass>edu.gonzaga.Main</mainClass>
                         <arguments>
                             <argument>argument1</argument>
                         </arguments>
