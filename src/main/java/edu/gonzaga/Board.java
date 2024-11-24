@@ -101,6 +101,7 @@ public class Board {
         if ( validateShipPlacement( newShip.getPosition(), newShip.isVertical(), newShip.getLength() ) == false ) {
             return;
         }
+
         // The placement of the ship is valid, add it to the list.
         shipList.add( newShip );
     }
