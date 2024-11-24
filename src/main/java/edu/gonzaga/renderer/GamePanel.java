@@ -37,6 +37,9 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         this.leftBoardModel = leftBoardModel;
         this.rightBoardModel = rightBoardModel;
 
+        leftBoardModel.addPropertyChangeListener(this);
+        rightBoardModel.addPropertyChangeListener(this);
+
         setLayout(new BattleshipLayout());
 
         leftBoard = new Board(leftBoardModel);
@@ -109,6 +112,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
                 getCurrentBoardModel().addShip(ship);
 
                 placingShip = false;
+                getCurrentBoard().ghostShip = null;
                 placeShipCallback.onShipPlaced();
             }
         }
@@ -116,6 +120,8 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
     private void onMouseMoved(MouseEvent e) {
         updateGhostShip();
+
+        repaint();
     }
 
     private Board getCurrentBoard() {

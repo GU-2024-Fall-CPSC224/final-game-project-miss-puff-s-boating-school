@@ -35,14 +35,14 @@ public class Board extends JPanel {
         gridCellSize = Math.min(getWidth() / TOTAL_CELLS, getHeight() / TOTAL_CELLS);
         boardSize = gridCellSize * TOTAL_CELLS;
 
-        for (edu.gonzaga.Ship ship : model.getShips()) {
-            drawShip((Graphics2D) g, Color.WHITE, ship);
-        }
-
         if (ghostShip != null) {
             boolean valid = model.validateShipPlacement(ghostShip.getPosition(), ghostShip.isVertical(), ghostShip.getLength());
 
             drawShip((Graphics2D) g, valid ? Color.GREEN : Color.RED, ghostShip);
+        }
+
+        for (edu.gonzaga.Ship ship : model.getShips()) {
+            drawShip((Graphics2D) g, Color.WHITE, ship);
         }
 
         drawGrid(g);

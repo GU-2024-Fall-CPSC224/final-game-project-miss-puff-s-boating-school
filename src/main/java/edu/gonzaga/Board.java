@@ -1,5 +1,6 @@
 package edu.gonzaga;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 
@@ -19,6 +20,8 @@ public class Board {
     // markers stores all markers placed on the player's board.
     private boolean[][] markers;
 
+    private final PropertyChangeSupport pcs;
+
     // -----------------------------------
     // METHODS START HERE
     // -----------------------------------
@@ -31,6 +34,15 @@ public class Board {
         shipList = new ArrayList<>();
         // Generate a new blank list for holding markers
         markers = new boolean[BOARD_SIZE][BOARD_SIZE];
+        pcs = new PropertyChangeSupport(this);
+    }
+
+    public void addPropertyChangeListener(java.beans.PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(java.beans.PropertyChangeListener listener) {
+        pcs.removePropertyChangeListener(listener);
     }
 
     /**
@@ -66,6 +78,8 @@ public class Board {
 
         // When checking a space, determine if a ship occupies it (a.k.a. the ship is "hit").
         isMarkerHit( playerCoord );
+
+        pcs.firePropertyChange("board", null, null);
     }
 
 
@@ -104,6 +118,8 @@ public class Board {
 
         // The placement of the ship is valid, add it to the list.
         shipList.add( newShip );
+
+        pcs.firePropertyChange("board", null, null);
     }
     /** getter function of the ship on a given tile
      * searches location by checking every single coordinate of the ships 
