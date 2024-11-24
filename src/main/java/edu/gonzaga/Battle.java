@@ -8,21 +8,45 @@ public class Battle extends Ship{
         super(x, y, isVertical);
     }
 
-    //use ability: multishot (maybe shoots in an 'X' pattern?)
-    public void multiShot(){
+    /**
+     * multiShot() checks five spaces in one turn, selected in a small "X" shape.
+     */
+    public void multiShot( Coordinate centerCoordinate, Board enemyBoard ){
         //user selects center tile to shoot
         
-        //shoot centertile
-        //shoot centertile x++ y++
-        //shoot centertile x++ y--
-        //shoot centertile x-- y++
-        //shoot centertile x-- y--
+        // Store X and Y coordinate values here for ease of checking multiple spaces quickly:
+        Integer centerX = centerCoordinate.x();
+        Integer centerY = centerCoordinate.y();
+
+        Coordinate cornerCoordinate;
+
+        // Check center tile for hit:
+        enemyBoard.setMarked( centerCoordinate );
+
+        // Check lower right space ( x++ y++ ):
+        cornerCoordinate = new Coordinate( centerX++, centerY++ );
+        enemyBoard.setMarked( cornerCoordinate );
+        
+        // Check upper right space ( x++ y-- ):
+        cornerCoordinate = new Coordinate( centerX++, centerY-- );
+        enemyBoard.setMarked( cornerCoordinate );
+
+        // Check lower left space ( x-- y++ ):
+        cornerCoordinate = new Coordinate( centerX--, centerY++ );
+        enemyBoard.setMarked( cornerCoordinate );
+
+        // Check upper left space ( x-- y-- ):
+        cornerCoordinate = new Coordinate( centerX--, centerY-- );
+        enemyBoard.setMarked( cornerCoordinate );
     }
+
 
     @Override
     public int getLength() {
         return length;
     }
+
+    
     @Override
     public shipType getType() {
         return shipId;

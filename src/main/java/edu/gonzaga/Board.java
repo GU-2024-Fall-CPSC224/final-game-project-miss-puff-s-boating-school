@@ -105,6 +105,33 @@ public class Board {
         // The placement of the ship is valid, add it to the list.
         shipList.add( newShip );
     }
+    /** getter function of the ship on a given tile
+     * searches location by checking every single coordinate of the ships 
+     * @param tile tile to be searched
+     * @return ship if ship exist in that space, null if the space is empty
+     */
+    public Ship getShip(Coordinate tile){
+
+        for ( Ship ship : shipList ) {
+            // Get the coordinates of the ship's segments:
+
+            // segmentCoordnets contains the coordinate objects of each segment of the current ship being checked.
+            ArrayList<Coordinate> segmentCoordinates = new ArrayList<>();
+            segmentCoordinates = ship.getAllCoordinates();
+
+            // Compare each segment against the space being checked:
+            // If they are equal, return true.
+            for ( Coordinate checkingCoord : segmentCoordinates ) {
+                if ( checkingCoord.equals( tile ) ) {
+
+                    return ship;
+                }
+            }
+            // If the coordinates are not equal, check next coordinate.
+        } // All ships checked.
+
+        return null;
+    }
 
 
     /**
@@ -134,43 +161,42 @@ public class Board {
             }
         }
 
+        // Check for ship collision:
+        for ( Ship collidingShip : shipList ) {
+
+            // Get all the potential collision points of each ship placed on the boards.
+            ArrayList<Coordinate> collidingShipCoordinates = new ArrayList<>();
+            collidingShipCoordinates = collidingShip.getAllCoordinates();
+
+            // If the collision ship has an intersecting point with your new ship, return false.
+            for ( Coordinate coordinate : segmentCoordinates ) {
+                if ( collidingShipCoordinates.contains( coordinate ) ) {
+                    System.out.println( "INVALID: ship collision detected at X-" 
+                                        + coordinate.x() + " : Y-" + coordinate.y() );
+                    return false;
+                }
+            }
+        }
+
         // If all spaces are checked without issue, then return true.
         return true;
     }
 
 
     /**
-     * isMarkerHit() determines if the checked space contains a ship by subsiquently
-     * checking every space that is overlapping with a ship.
+     * isMarkerHit() determines if the checked space contains a ship by calling getShip
      * 
      * @param markerX -coordinate of attempted shot
      * @param markerY -coordinate of attempted shot
      * @return is there a ship on that tile
      */
     public boolean isMarkerHit( Coordinate playerCoord ){
+        boolean hasShip = false;
 
-        // Check if the checked space hits a ship:
-        for ( Ship ship : shipList ) {
-            // Get the coordinates of the ship's segments:
-
-            // segmentCoordnets contains the coordinate objects of each segment of the current ship being checked.
-            ArrayList<Coordinate> segmentCoordinates = new ArrayList<>();
-            segmentCoordinates = ship.getAllCoordinates();
-
-            // Compare each ssegment against the space being checked:
-            // If they are equal, return true.
-            for ( Coordinate checkingCoord : segmentCoordinates ) {
-                if ( checkingCoord.equals( playerCoord ) ) {
-
-                    // < ---- If we wnated to call isShipSunk anywhere, it would have to be here.
-
-                    return true;
-                }
-            }
-            // If the coordinates are not equal, check next coordinate.
-        } // All ships checked.
-        // If no coordinates overlap, than return false. The checked space is not a hit.
-        return false;
+        if (getShip(playerCoord) != null){
+            hasShip = true;
+        }
+        return hasShip;
     }
 
 

@@ -174,6 +174,24 @@ public class BoardTest {
         assertFalse( testBoard.validateShipPlacement( testShip.getPosition(), testShip.isVertical(), testShip.getLength() ) );
     }
 
+    @Test
+    void checkValidShipPlacement6() {
+
+        // Generate test board
+        Board testBoard = new Board();
+
+        // Create a test ship for the board, facing downward and starting at coordinate [5, 5]:
+        Ship testShip = new GenericShip(5, 0, true, 5);
+        Ship collisionShip = new GenericShip(2, 3, false, 5);
+
+        // Add the collision ship to the board:
+        testBoard.addShip( collisionShip );
+
+        // Check if the player's chosen space overlaps with a ship!
+        System.out.println( "Expected boolean state is false: the ship cannot be placed." );
+        assertFalse( testBoard.validateShipPlacement( testShip.getPosition(), testShip.isVertical(), testShip.getLength() ) );
+    }
+
     // ---------------------------- ship sinking method checks -----------------------------
 
     @Test

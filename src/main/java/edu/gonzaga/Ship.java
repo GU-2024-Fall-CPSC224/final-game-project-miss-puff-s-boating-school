@@ -79,6 +79,11 @@ public abstract class Ship {
     */
     public abstract int getLength();
 
+
+    /**
+     * getType() returns the type of ship.
+     * @return shipType
+     */
     public abstract shipType getType();
 
 

@@ -1,5 +1,7 @@
 package edu.gonzaga;
 
+import java.util.ArrayList;
+
 public class Destroyer extends Ship {
     private final int length = 2; 
     private shipType shipId = shipType.DESTROYER;
@@ -8,10 +10,26 @@ public class Destroyer extends Ship {
         super(x, y, isVertical);
     }
 
-    //use ability: one-shot enemy boat
-    public void powerShot(){
-        //user selects tile to shoot
-        //if its a hit, all other tiles occupied by that ship will be marked, and ship is sunk
+    
+    /**
+     * powerShot() sinks any shit it hits instantly, marking all spaces hit.
+     */
+    public void powerShot( Coordinate playerCoordinate, Board enemyBoard ) {
+        
+        // Check initial space:
+        if ( enemyBoard.isMarkerHit( playerCoordinate ) == true ) {
+
+            // Get the enemy player ship hit.
+            Ship enemyShip = enemyBoard.getShip( playerCoordinate );
+            // Get all the coordinates from the enemy player's ship.
+            ArrayList<Coordinate> enemyShipCoordinates = new ArrayList<>();
+            enemyShipCoordinates = enemyShip.getAllCoordinates();
+
+            // Set all coordinate of the enemy ship to marked:
+            for ( Coordinate coordinate : enemyShipCoordinates ) {
+                enemyBoard.setMarked( coordinate );
+            }
+        }
     }
 
     @Override
