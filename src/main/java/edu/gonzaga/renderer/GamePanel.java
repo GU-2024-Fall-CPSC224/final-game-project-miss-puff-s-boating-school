@@ -1,13 +1,11 @@
 package edu.gonzaga.renderer;
 
+import edu.gonzaga.Carrier;
+import edu.gonzaga.Coordinate;
 import edu.gonzaga.Ship;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -15,7 +13,12 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     private edu.gonzaga.Board leftBoardModel;
     private edu.gonzaga.Board rightBoardModel;
 
-    private boolean leftTurn = true;
+    private boolean player1Turn = true;
+
+    private boolean placingShip = false;
+    private Ship.shipType currentShipType;
+    private boolean currentShipVertical;
+    private PlaceShipCallback placeShipCallback;
 
     private Board leftBoard;
     private Board rightBoard;
@@ -25,8 +28,8 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
     /** Handles mouse events. */
     private MouseAdapter mouseAdapter;
-    /** Handles key events. */
-    private KeyAdapter keyAdapter;
+
+    private Action rotateShipAction;
 
     public GamePanel(edu.gonzaga.Board leftBoardModel, edu.gonzaga.Board rightBoardModel) {
         super();
@@ -63,41 +66,111 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
             }
         };
 
-        keyAdapter = new KeyAdapter() {
+        rotateShipAction = new AbstractAction() {
             @Override
-            public void keyTyped(KeyEvent e) {
-                onKeyTyped(e);
+            public void actionPerformed(ActionEvent e) {
+                if (placingShip) {
+                    currentShipVertical = !currentShipVertical;
+                    updateGhostShip();
+                }
             }
         };
 
+        getInputMap().put(KeyStroke.getKeyStroke("R"), "rotateShip");
+        getActionMap().put("rotateShip", rotateShipAction);
+
         addMouseListener(mouseAdapter);
         addMouseMotionListener(mouseAdapter);
-        addKeyListener(keyAdapter);
 
         setOpaque(true);
     }
 
-    public void setPlayerTurn(boolean leftTurn) {
-        this.leftTurn = leftTurn;
+    public void setPlayer1Turn(boolean player1Turn) {
+        this.player1Turn = player1Turn;
     }
 
-    public void placeShip(boolean player1, Ship.shipType type, int length, PlaceShipCallback callback) {
-
+    public void placeShip(Ship.shipType type, int length, PlaceShipCallback callback) {
+        placingShip = true;
+        currentShipType = type;
+        currentShipVertical = true;
+        placeShipCallback = callback;
     }
 
     private void onMouseClicked(MouseEvent e) {
+        if (placingShip) {
+            Ship ship = getCurrentBoard().ghostShip;
+
+            // Just because we are placing a ship doesn't mean we have a ghost ship to try and place
+            if (ship == null) {
+                return;
+            }
+
+            if (getCurrentBoardModel().validateShipPlacement(ship.getPosition(), ship.isVertical(), ship.getLength())) {
+                getCurrentBoardModel().addShip(ship);
+
+                placingShip = false;
+                placeShipCallback.onShipPlaced();
+            }
+        }
     }
 
     private void onMouseMoved(MouseEvent e) {
-        leftBoard.repaint();
-        rightBoard.repaint();
+        updateGhostShip();
     }
 
-    private void onKeyTyped(KeyEvent e) {
+    private Board getCurrentBoard() {
+        return player1Turn ? leftBoard : rightBoard;
+    }
+
+    private edu.gonzaga.Board getCurrentBoardModel() {
+        return player1Turn ? leftBoardModel : rightBoardModel;
+    }
+
+    private void updateGhostShip() {
+        if (placingShip) {
+            if (player1Turn) {
+                leftBoard.ghostShip = constructGhostShip(leftBoard);
+
+                leftBoard.repaint();
+            } else {
+                rightBoard.ghostShip = constructGhostShip(rightBoard);
+
+                rightBoard.repaint();
+            }
+        }
+    }
+
+    private Ship constructGhostShip(Board board) {
+        Coordinate coords = board.getCellMouseIsOver();
+
+        if (coords == null) {
+            return null;
+        }
+
+        switch (currentShipType) {
+            case CARRIER -> {
+                return new Carrier(coords.x(), coords.y(), currentShipVertical);
+            }
+            case BATTLE -> {
+                return new edu.gonzaga.Battle(coords.x(), coords.y(), currentShipVertical);
+            }
+            case CRUISER -> {
+                return new edu.gonzaga.Cruiser(coords.x(), coords.y(), currentShipVertical);
+            }
+            case SUB -> {
+                return new edu.gonzaga.Sub(coords.x(), coords.y(), currentShipVertical);
+            }
+            case DESTROYER -> {
+                return new edu.gonzaga.Destroyer(coords.x(), coords.y(), currentShipVertical);
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        repaint();
     }
 }

@@ -13,29 +13,15 @@ import java.util.HashMap;
 public class Board extends JPanel {
     private static final int TOTAL_CELLS = 11;
 
-    private final HashMap<String, BufferedImage> imageBuffers;
 
     private final edu.gonzaga.Board model;
     private int gridCellSize;
     private int boardSize;
 
+    public edu.gonzaga.Ship ghostShip;
+
     public Board(edu.gonzaga.Board model) {
         super();
-
-        imageBuffers = new HashMap<>();
-
-        try {
-            imageBuffers.put("carrier", ImageIO.read(new File("res/ships/carrier.png")));
-            imageBuffers.put("battle", ImageIO.read(new File("res/ships/battleship.png")));
-            imageBuffers.put("cruiser", ImageIO.read(new File("res/ships/cruiser.png")));
-            imageBuffers.put("sub", ImageIO.read(new File("res/ships/submarine.png")));
-            imageBuffers.put("destroyer", ImageIO.read(new File("res/ships/destroyer.png")));
-
-            imageBuffers.put("hit", ImageIO.read(new File("res/board/hit.png")));
-            imageBuffers.put("miss", ImageIO.read(new File("res/board/miss.png")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         this.model = model;
         setLayout(new GridLayout(TOTAL_CELLS, TOTAL_CELLS));
@@ -53,6 +39,12 @@ public class Board extends JPanel {
             drawShip((Graphics2D) g, Color.WHITE, ship);
         }
 
+        if (ghostShip != null) {
+            boolean valid = model.validateShipPlacement(ghostShip.getPosition(), ghostShip.isVertical(), ghostShip.getLength());
+
+            drawShip((Graphics2D) g, valid ? Color.GREEN : Color.RED, ghostShip);
+        }
+
         drawGrid(g);
 
         for (int x = 0; x < 10; x++) {
@@ -68,6 +60,19 @@ public class Board extends JPanel {
 
     public int getGridCellSize() {
         return gridCellSize;
+    }
+
+    public Coordinate getCellMouseIsOver() {
+        Point mousePos = getMousePosition();
+
+        if (mousePos == null) {
+            return null;
+        }
+
+        int x = (int) Math.floor((double) mousePos.x / gridCellSize) - 1;
+        int y = (int) Math.floor((double) mousePos.y / gridCellSize) - 1;
+
+        return new Coordinate(x, y);
     }
 
     private void drawGrid(Graphics g) {
@@ -94,8 +99,6 @@ public class Board extends JPanel {
     }
 
     private void drawShip(Graphics2D g, Color color, edu.gonzaga.Ship ship) {
-        g.setColor(color);
-
         int x = ship.getPosition().x() + 1;
         int y = ship.getPosition().y() + 1;
 
@@ -106,15 +109,17 @@ public class Board extends JPanel {
             g.translate(-gridCellSize, 0);
         }
 
-        String key = ship.getType().name().toLowerCase();
+        BufferedImage img;
 
-        System.out.println("Key: " + key);
-
-        if (imageBuffers.containsKey(key) == false) {
-            System.out.println("Key not found: " + key);
+        if (color == Color.RED) {
+            img = ImageBuffers.getInstance().getImage(ship.getType().name().toLowerCase() + "-red");
+        } else if (color == Color.GREEN) {
+            img = ImageBuffers.getInstance().getImage(ship.getType().name().toLowerCase() + "-green");
+        } else {
+            img = ImageBuffers.getInstance().getImage(ship.getType().name().toLowerCase());
         }
 
-        g.drawImage(imageBuffers.get(ship.getType().name().toLowerCase()),
+        g.drawImage(img,
                 x * gridCellSize,
                 y * gridCellSize,
                 gridCellSize,
@@ -125,7 +130,10 @@ public class Board extends JPanel {
     }
 
     private void drawMarker(Graphics g, int x, int y, boolean hit) {
-        g.drawImage(hit ? imageBuffers.get("hit") : imageBuffers.get("miss"),
+        BufferedImage hitImage = ImageBuffers.getInstance().getImage("hit");
+        BufferedImage missImage = ImageBuffers.getInstance().getImage("miss");
+
+        g.drawImage(hit ? hitImage : missImage,
                 x * gridCellSize,
                 y * gridCellSize,
                 gridCellSize,
@@ -133,11 +141,4 @@ public class Board extends JPanel {
                 null
         );
     }
-
-//    private Vec2i getCellMouseIsOver(Point mousePos) {
-//        int x = (int) Math.floor((double) mousePos.x / gridCellSize) - 1;
-//        int y = (int) Math.floor((double) mousePos.y / gridCellSize) - 1;
-//
-//        return new Vec2i(x, y);
-//    }
 }

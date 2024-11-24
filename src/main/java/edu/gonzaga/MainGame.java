@@ -16,6 +16,7 @@ package edu.gonzaga;
 import edu.gonzaga.renderer.GameFrame;
 import edu.gonzaga.renderer.GamePanel;
 import edu.gonzaga.renderer.IntroPanel;
+import edu.gonzaga.renderer.PlaceShipCallback;
 
 /** Main program class for launching your team's program. */
 public class MainGame {
@@ -38,7 +39,12 @@ public class MainGame {
 //                System.out.println("Settings");
 //            });
 
-            frame.setActivePanel(new GamePanel(leftBoard, rightBoard));
+            GamePanel gamePanel = new GamePanel(leftBoard, rightBoard);
+            gamePanel.placeShip(Ship.shipType.CARRIER, 0, () -> {
+                System.out.println("Ship placed");
+            });
+
+            frame.setActivePanel(gamePanel);
         });
     }
 }
