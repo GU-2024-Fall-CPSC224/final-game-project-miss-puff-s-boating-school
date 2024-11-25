@@ -39,6 +39,7 @@ public class Game implements Runnable, PlaceShipCallback {
 
 
     Player player1 = new Player( "TEST PLAYER 1" );
+    Player player2 = new Player( "TEST PLAYER 2" );
 
     Board leftBoard = new Board();
     Board rightBoard = new Board();
@@ -62,7 +63,7 @@ public class Game implements Runnable, PlaceShipCallback {
         
         runSetupPhase( player1, gamePanel );
 
-
+        runSetupPhase( player2, gamePanel );
 
         // INTRO SCREEN:
 
@@ -70,7 +71,7 @@ public class Game implements Runnable, PlaceShipCallback {
 
         // While the game is not over 
         
-        */ // < ------ RUnning this seems to cause the game to crash / infinite white screen of death?
+        // < ------ RUnning this seems to cause the game to crash / infinite white screen of death?
 
         // Turns phase
 
@@ -83,6 +84,10 @@ public class Game implements Runnable, PlaceShipCallback {
         shipsPlaced++;
         // If finished, return from this method.
         if ( shipsPlaced >= 5 ) {
+            // If the first player has completed their setup, switch the game state to the second player's setup.
+            if ( currentGameState == Game.GameState.PLAYER_1_SETUP ) {
+                changeGameState( Game.GameState.PLAYER_2_SETUP );
+            }
             return;
         }
         // If fewer than 5 ships have been placed, simply call the placeship method again with the next ship ENUM.
@@ -97,6 +102,7 @@ public class Game implements Runnable, PlaceShipCallback {
 
         changeGameState( Game.GameState.PLAYER_1_SETUP );
         // Tell the player it's their turn to set up ships!
+        System.out.println( currentPlayer.getName() + ", it's your turn to set up!");
         /*
          * I imagine we will need to add some sort of text display between the boards that tells the players when it's their turn,
          * how to rotate ship and place them, and other information. I notice that currently the text for the game uses a paint
