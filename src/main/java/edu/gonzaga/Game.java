@@ -46,11 +46,13 @@ public class Game implements Runnable, PlaceShipCallback {
 
         // While the game is not over 
         
-        /* while ( gameOver == false ) {
+        /* 
+        while ( gameOver == false ) {
             
             // Setup phase:
 
-        } */
+        }
+        */ // < ------ RUnning this seems to cause the game to crash / infinite white screen of death?
 
         // Turns phase
 
@@ -74,19 +76,22 @@ public class Game implements Runnable, PlaceShipCallback {
 
         // Stores all the ship types for our player to pull ships from.
         ArrayList<Ship.shipType> ships = new ArrayList<>();
-        ships.add( Ship.shipType.DESTROYER );
         ships.add( Ship.shipType.CARRIER );
+        ships.add( Ship.shipType.CARRIER );
+        // All the needed ships would be listed here?
 
         // Tell the player it's their turn to set up ships!
         /*
          * I imagine we will need to add some sort of text display between the boards that tells the players when it's their turn,
-         * how to rotate ship and place them, and other information.
+         * how to rotate ship and place them, and other information. I notice that currently the text for the game uses a paint
+         * component to do this? How do I access this?
          */
         
         // Place SHIPS!
         for ( Ship.shipType shipToPlace : ships ) {
 
-            gamePanel.placeShip( shipToPlace, 0, this);
+            gamePanel.placeShip( shipToPlace, 0, this); // It appears that calling this function does not pause the loop.
+            System.out.println( "Moving on to next ship..."); // I mean that all the ship type get passed before you even place one.
         }
 
     }
