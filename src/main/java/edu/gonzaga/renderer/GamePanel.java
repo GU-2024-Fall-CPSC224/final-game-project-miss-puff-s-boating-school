@@ -1,5 +1,6 @@
 package edu.gonzaga.renderer;
 
+import edu.gonzaga.Game;
 import edu.gonzaga.ships.*;
 import edu.gonzaga.Coordinate;
 
@@ -12,12 +13,15 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     private edu.gonzaga.Board leftBoardModel;
     private edu.gonzaga.Board rightBoardModel;
 
-    private boolean player1Turn = true;
+    private Game.GameState gameState;
 
-    private boolean placingShip = false;
+    private boolean placingShip;
     private Ship.ShipType currentShipType;
     private boolean currentShipVertical;
     private PlaceShipCallback placeShipCallback;
+
+    private boolean takingAction;
+    private TakeActionCallback takeActionCallback;
 
     private Board leftBoard;
     private Board rightBoard;
@@ -68,10 +72,12 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         rotateShipAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (placingShip) {
-                    currentShipVertical = !currentShipVertical;
-                    updateGhostShip();
+                if (!placingShip) {
+                    return;
                 }
+
+                currentShipVertical = !currentShipVertical;
+                updateGhostShip();
             }
         };
 
@@ -84,8 +90,8 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         setOpaque(true);
     }
 
-    public void setPlayer1Turn(boolean player1Turn) {
-        this.player1Turn = player1Turn;
+    public void setGameState(Game.GameState gameState) {
+        this.gameState = gameState;
     }
 
     public void placeShip(Ship.ShipType type, PlaceShipCallback callback) {
@@ -93,6 +99,11 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         currentShipType = type;
         currentShipVertical = true;
         placeShipCallback = callback;
+    }
+
+    public void takeAction(TakeActionCallback callback) {
+        takingAction = true;
+        takeActionCallback = callback;
     }
 
     private void onMouseClicked(MouseEvent e) {
@@ -107,6 +118,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
             if (getCurrentBoardModel().validateShipPlacement( ship )) {
                 getCurrentBoardModel().addShip(ship);
 
+                getCurrentBoard().ghostShip = null;
                 placingShip = false;
                 placeShipCallback.onShipPlaced();
             }
@@ -118,16 +130,24 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     }
 
     private Board getCurrentBoard() {
-        return player1Turn ? leftBoard : rightBoard;
+        if (gameState == Game.GameState.PLAYER_1_SETUP || gameState == Game.GameState.PLAYER_1_TURN) {
+            return leftBoard;
+        } else {
+            return rightBoard;
+        }
     }
 
     private edu.gonzaga.Board getCurrentBoardModel() {
-        return player1Turn ? leftBoardModel : rightBoardModel;
+        if (gameState == Game.GameState.PLAYER_1_SETUP || gameState == Game.GameState.PLAYER_1_TURN) {
+            return leftBoardModel;
+        } else {
+            return rightBoardModel;
+        }
     }
 
     private void updateGhostShip() {
         if (placingShip) {
-            if (player1Turn) {
+            if (gameState == Game.GameState.PLAYER_1_SETUP) {
                 leftBoard.ghostShip = constructGhostShip(leftBoard);
 
                 leftBoard.repaint();

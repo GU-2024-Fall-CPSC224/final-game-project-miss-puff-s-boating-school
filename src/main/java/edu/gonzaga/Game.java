@@ -13,11 +13,6 @@ public class Game implements Runnable, PlaceShipCallback {
     // --------------------------------------
     //         Attributes are here:
     // --------------------------------------
-    
-    /**
-     * Holds the state of the game (whether it is over or not).
-     */
-    Boolean gameOver = false;
 
     Integer shipsPlaced = 0;
 
@@ -74,11 +69,14 @@ public class Game implements Runnable, PlaceShipCallback {
         shipsPlaced++;
         // If finished, return from this method.
         if ( shipsPlaced >= 5 ) {
+            shipsPlaced = 0;
+
             // If the first player has completed their setup, switch the game state to the second player's setup.
             if ( currentGameState == Game.GameState.PLAYER_1_SETUP ) {
                 changeGameState( Game.GameState.PLAYER_2_SETUP );
                 runSetupPhase( player2, gamePanel );
             }
+
             return;
         }
         // If fewer than 5 ships have been placed, simply call the placeship method again with the next ship ENUM.
@@ -112,5 +110,6 @@ public class Game implements Runnable, PlaceShipCallback {
      */
     public void changeGameState( Game.GameState newState ) {
         currentGameState = newState;
+        gamePanel.setGameState( newState );
     }
 }
