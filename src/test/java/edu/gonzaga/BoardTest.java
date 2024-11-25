@@ -2,7 +2,8 @@ package edu.gonzaga;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Assertions;
+import edu.gonzaga.ships.GenericShip;
+import edu.gonzaga.ships.Ship;
 import org.junit.jupiter.api.Test;
 
 public class BoardTest {

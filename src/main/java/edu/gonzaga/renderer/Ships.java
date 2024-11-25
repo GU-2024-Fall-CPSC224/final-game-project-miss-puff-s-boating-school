@@ -1,5 +1,7 @@
 package edu.gonzaga.renderer;
 
+import edu.gonzaga.ships.Ship;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -19,7 +21,7 @@ public class Ships extends JScrollPane {
         container.setLayout(new GridLayout(0, 1, 0, 10));
         container.setBackground(Color.BLACK);
 
-        for (edu.gonzaga.Ship ship : board.getShips()) {
+        for (Ship ship : board.getShips()) {
             ShipCard card = new ShipCard(ship);
             container.add(card);
         }

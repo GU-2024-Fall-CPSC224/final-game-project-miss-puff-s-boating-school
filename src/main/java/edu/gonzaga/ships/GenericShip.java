@@ -1,8 +1,7 @@
-package edu.gonzaga;
+package edu.gonzaga.ships;
 
 public class GenericShip extends Ship {
     private final int length;
-    private shipType shipId = shipType.GENERIC;
 
     public GenericShip(int x, int y, boolean isVertical, int length) {
         super(x, y, isVertical);
@@ -13,8 +12,9 @@ public class GenericShip extends Ship {
     public int getLength() {
         return length;
     }
+
     @Override
-    public shipType getType() {
-        return shipId;
+    public ShipType getType() {
+        throw new UnsupportedOperationException("Generic ship does not have a type.");
     }
 }

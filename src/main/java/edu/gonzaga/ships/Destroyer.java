@@ -1,10 +1,13 @@
-package edu.gonzaga;
+package edu.gonzaga.ships;
+
+import edu.gonzaga.Board;
+import edu.gonzaga.Coordinate;
 
 import java.util.ArrayList;
 
 public class Destroyer extends Ship {
     private final int length = 2; 
-    private shipType shipId = shipType.DESTROYER;
+    private ShipType shipId = ShipType.DESTROYER;
 
     public Destroyer(int x, int y, boolean isVertical) {
         super(x, y, isVertical);
@@ -14,7 +17,7 @@ public class Destroyer extends Ship {
     /**
      * powerShot() sinks any shit it hits instantly, marking all spaces hit.
      */
-    public void powerShot( Coordinate playerCoordinate, Board enemyBoard ) {
+    public void powerShot(Coordinate playerCoordinate, Board enemyBoard ) {
         
         // Check initial space:
         if ( enemyBoard.isMarkerHit( playerCoordinate ) == true ) {
@@ -37,7 +40,7 @@ public class Destroyer extends Ship {
         return length;
     }
     @Override
-    public shipType getType() {
+    public ShipType getType() {
         return shipId;
     }
 

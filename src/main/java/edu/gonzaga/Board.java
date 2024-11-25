@@ -1,5 +1,7 @@
 package edu.gonzaga;
 
+import edu.gonzaga.ships.Ship;
+
 import java.util.ArrayList;
 
 

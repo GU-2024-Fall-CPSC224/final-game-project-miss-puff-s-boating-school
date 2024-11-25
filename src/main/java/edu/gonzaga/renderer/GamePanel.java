@@ -1,8 +1,7 @@
 package edu.gonzaga.renderer;
 
-import edu.gonzaga.Carrier;
+import edu.gonzaga.ships.*;
 import edu.gonzaga.Coordinate;
-import edu.gonzaga.Ship;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -16,7 +15,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     private boolean player1Turn = true;
 
     private boolean placingShip = false;
-    private Ship.shipType currentShipType;
+    private Ship.ShipType currentShipType;
     private boolean currentShipVertical;
     private PlaceShipCallback placeShipCallback;
 
@@ -89,7 +88,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         this.player1Turn = player1Turn;
     }
 
-    public void placeShip(Ship.shipType type, int length, PlaceShipCallback callback) {
+    public void placeShip(Ship.ShipType type, PlaceShipCallback callback) {
         placingShip = true;
         currentShipType = type;
         currentShipVertical = true;
@@ -151,17 +150,17 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
             case CARRIER -> {
                 return new Carrier(coords.x(), coords.y(), currentShipVertical);
             }
-            case BATTLE -> {
-                return new edu.gonzaga.Battle(coords.x(), coords.y(), currentShipVertical);
+            case BATTLESHIP -> {
+                return new Battleship(coords.x(), coords.y(), currentShipVertical);
             }
             case CRUISER -> {
-                return new edu.gonzaga.Cruiser(coords.x(), coords.y(), currentShipVertical);
+                return new Cruiser(coords.x(), coords.y(), currentShipVertical);
             }
-            case SUB -> {
-                return new edu.gonzaga.Sub(coords.x(), coords.y(), currentShipVertical);
+            case SUBMARINE -> {
+                return new Submarine(coords.x(), coords.y(), currentShipVertical);
             }
             case DESTROYER -> {
-                return new edu.gonzaga.Destroyer(coords.x(), coords.y(), currentShipVertical);
+                return new Destroyer(coords.x(), coords.y(), currentShipVertical);
             }
             default -> {
                 return null;

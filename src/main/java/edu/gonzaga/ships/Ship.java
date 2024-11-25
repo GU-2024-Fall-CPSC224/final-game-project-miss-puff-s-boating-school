@@ -1,43 +1,35 @@
-package edu.gonzaga;
+package edu.gonzaga.ships;
+
+import edu.gonzaga.Coordinate;
 
 import java.util.ArrayList;
 
 public abstract class Ship {
-    
-    // -----------------------------------
-    // ATTRIBUTES START HERE
-    // -----------------------------------
+    /**
+     * The type of ship.
+     */
+    public enum ShipType {
+        CARRIER,
+        BATTLESHIP,
+        SUBMARINE,
+        CRUISER,
+        DESTROYER
+    }
 
     /**
      * Primary ship coordinates are stored here.
      */
-    private Coordinate position;
+    private final Coordinate position;
 
     /**
      * Determines if the ship will extend downwards or to the right.
      */ 
     private final boolean isVertical;
 
-
-    public enum shipType {
-        CARRIER,
-        BATTLE,
-        SUB,
-        CRUISER,
-        DESTROYER,
-        GENERIC //to be deleted later, just for testing purposes
-    }
-
     /**
      * Holds the state of whether the ship is still in play.
      */ 
     private boolean isSunk;
-
-
-    // -----------------------------------
-    // METHODS START HERE
-    // -----------------------------------
-
 
     /**
      * Basic ship constructor
@@ -46,13 +38,10 @@ public abstract class Ship {
      * @param isVertical
      */
     public Ship(int x, int y, boolean isVertical) {
-        
-        //Set ship primary coordinates:
         this.position = new Coordinate( x, y );
         this.isVertical = isVertical;
         this.isSunk = false;
     }
-
 
     /**
      * getPrimaryCoordinate() gets the primary (main) coordinate of a ship.
@@ -62,7 +51,6 @@ public abstract class Ship {
     public Coordinate getPosition() {
         return position;
     }
-
 
     /**
      * isVertical() checks the direction the ship is facing (upwards to to the right)
@@ -84,8 +72,7 @@ public abstract class Ship {
      * getType() returns the type of ship.
      * @return shipType
      */
-    public abstract shipType getType();
-
+    public abstract ShipType getType();
 
 
     /**

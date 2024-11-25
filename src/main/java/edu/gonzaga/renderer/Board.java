@@ -1,14 +1,12 @@
 package edu.gonzaga.renderer;
 
 import edu.gonzaga.Coordinate;
+import edu.gonzaga.ships.Ship;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.HashMap;
 
 public class Board extends JPanel {
     private static final int TOTAL_CELLS = 11;
@@ -18,7 +16,7 @@ public class Board extends JPanel {
     private int gridCellSize;
     private int boardSize;
 
-    public edu.gonzaga.Ship ghostShip;
+    public Ship ghostShip;
 
     public Board(edu.gonzaga.Board model) {
         super();
@@ -35,7 +33,7 @@ public class Board extends JPanel {
         gridCellSize = Math.min(getWidth() / TOTAL_CELLS, getHeight() / TOTAL_CELLS);
         boardSize = gridCellSize * TOTAL_CELLS;
 
-        for (edu.gonzaga.Ship ship : model.getShips()) {
+        for (Ship ship : model.getShips()) {
             drawShip((Graphics2D) g, Color.WHITE, ship);
         }
 
@@ -98,7 +96,7 @@ public class Board extends JPanel {
         }
     }
 
-    private void drawShip(Graphics2D g, Color color, edu.gonzaga.Ship ship) {
+    private void drawShip(Graphics2D g, Color color, Ship ship) {
         int x = ship.getPosition().x() + 1;
         int y = ship.getPosition().y() + 1;
 

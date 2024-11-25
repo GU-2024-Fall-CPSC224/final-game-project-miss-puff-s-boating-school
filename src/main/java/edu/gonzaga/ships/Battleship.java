@@ -1,17 +1,20 @@
-package edu.gonzaga;
+package edu.gonzaga.ships;
 
-public class Battle extends Ship{
+import edu.gonzaga.Board;
+import edu.gonzaga.Coordinate;
+
+public class Battleship extends Ship {
     private final int length = 4; 
-    private shipType shipId = shipType.BATTLE;
+    private ShipType shipId = ShipType.BATTLESHIP;
 
-    public Battle(int x, int y, boolean isVertical) {
+    public Battleship(int x, int y, boolean isVertical) {
         super(x, y, isVertical);
     }
 
     /**
      * multiShot() checks five spaces in one turn, selected in a small "X" shape.
      */
-    public void multiShot( Coordinate centerCoordinate, Board enemyBoard ){
+    public void multiShot(Coordinate centerCoordinate, Board enemyBoard ){
         //user selects center tile to shoot
         
         // Store X and Y coordinate values here for ease of checking multiple spaces quickly:
@@ -48,7 +51,7 @@ public class Battle extends Ship{
 
     
     @Override
-    public shipType getType() {
+    public ShipType getType() {
         return shipId;
     }
 }

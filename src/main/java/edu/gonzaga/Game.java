@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.gonzaga.renderer.GameFrame;
 import edu.gonzaga.renderer.GamePanel;
 import edu.gonzaga.renderer.PlaceShipCallback;
+import edu.gonzaga.ships.Ship;
 
 public class Game implements Runnable, PlaceShipCallback {
     
@@ -75,9 +76,9 @@ public class Game implements Runnable, PlaceShipCallback {
         Boolean allShipsPlaced = false;
 
         // Stores all the ship types for our player to pull ships from.
-        ArrayList<Ship.shipType> ships = new ArrayList<>();
-        ships.add( Ship.shipType.CARRIER );
-        ships.add( Ship.shipType.CARRIER );
+        ArrayList<Ship.ShipType> ships = new ArrayList<>();
+        ships.add( Ship.ShipType.CARRIER );
+        ships.add( Ship.ShipType.CARRIER );
         // All the needed ships would be listed here?
 
         // Tell the player it's their turn to set up ships!
@@ -88,9 +89,9 @@ public class Game implements Runnable, PlaceShipCallback {
          */
         
         // Place SHIPS!
-        for ( Ship.shipType shipToPlace : ships ) {
+        for ( Ship.ShipType shipToPlace : ships ) {
 
-            gamePanel.placeShip( shipToPlace, 0, this); // It appears that calling this function does not pause the loop.
+            gamePanel.placeShip( shipToPlace, this); // It appears that calling this function does not pause the loop.
             System.out.println( "Moving on to next ship..."); // I mean that all the ship type get passed before you even place one.
         }
 

@@ -1,5 +1,7 @@
 package edu.gonzaga.renderer;
 
+import edu.gonzaga.ships.Ship;
+
 import javax.swing.*;
 
 /**
@@ -7,9 +9,9 @@ import javax.swing.*;
  */
 public class ShipCard extends JPanel {
     /** The ship to display. */
-    private edu.gonzaga.Ship ship;
+    private Ship ship;
 
-    public ShipCard(edu.gonzaga.Ship ship) {
+    public ShipCard(Ship ship) {
         super();
 
         this.ship = ship;
