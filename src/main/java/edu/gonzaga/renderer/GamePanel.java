@@ -123,10 +123,28 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
                 placeShipCallback.onShipPlaced();
             }
         }
+
+        if (takingAction) {
+            Coordinate coord = getOppositeBoard().getCellMouseIsOver();
+
+            if (coord == null) {
+                return;
+            }
+
+            if (getOppositeBoardModel().isMarked(coord)) {
+                return;
+            }
+
+            getOppositeBoard().ghostMarker = null;
+            getOppositeBoardModel().setMarked(coord);
+            takingAction = false;
+            takeActionCallback.onActionTaken();
+        }
     }
 
     private void onMouseMoved(MouseEvent e) {
         updateGhostShip();
+        updateGhostMarker();
     }
 
     private Board getCurrentBoard() {
@@ -134,6 +152,14 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
             return leftBoard;
         } else {
             return rightBoard;
+        }
+    }
+
+    private Board getOppositeBoard() {
+        if (gameState == Game.GameState.PLAYER_1_SETUP || gameState == Game.GameState.PLAYER_1_TURN) {
+            return rightBoard;
+        } else {
+            return leftBoard;
         }
     }
 
@@ -145,17 +171,42 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         }
     }
 
+    private edu.gonzaga.Board getOppositeBoardModel() {
+        if (gameState == Game.GameState.PLAYER_1_SETUP || gameState == Game.GameState.PLAYER_1_TURN) {
+            return rightBoardModel;
+        } else {
+            return leftBoardModel;
+        }
+    }
+
     private void updateGhostShip() {
-        if (placingShip) {
-            if (gameState == Game.GameState.PLAYER_1_SETUP) {
-                leftBoard.ghostShip = constructGhostShip(leftBoard);
+        if (!placingShip) {
+            return;
+        }
 
-                leftBoard.repaint();
-            } else {
-                rightBoard.ghostShip = constructGhostShip(rightBoard);
+        if (gameState == Game.GameState.PLAYER_1_SETUP) {
+            leftBoard.ghostShip = constructGhostShip(leftBoard);
 
-                rightBoard.repaint();
-            }
+            leftBoard.repaint();
+        } else {
+            rightBoard.ghostShip = constructGhostShip(rightBoard);
+
+            rightBoard.repaint();
+        }
+    }
+
+    private void updateGhostMarker() {
+        if (!takingAction) {
+            return;
+        }
+
+        // Show the ghost on the other board
+        if (gameState == Game.GameState.PLAYER_1_TURN) {
+            rightBoard.ghostMarker = rightBoard.getCellMouseIsOver();
+            rightBoard.repaint();
+        } else {
+            leftBoard.ghostMarker = leftBoard.getCellMouseIsOver();
+            leftBoard.repaint();
         }
     }
 

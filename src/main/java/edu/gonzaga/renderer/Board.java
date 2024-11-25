@@ -11,12 +11,12 @@ import java.awt.image.BufferedImage;
 public class Board extends JPanel {
     private static final int TOTAL_CELLS = 11;
 
-
     private final edu.gonzaga.Board model;
     private int gridCellSize;
     private int boardSize;
 
     public Ship ghostShip;
+    public Coordinate ghostMarker;
 
     public Board(edu.gonzaga.Board model) {
         super();
@@ -54,6 +54,10 @@ public class Board extends JPanel {
                 }
             }
         }
+
+        if (ghostMarker != null) {
+            drawMarker(g, ghostMarker.x() + 1, ghostMarker.y() + 1, false);
+        }
     }
 
     public int getGridCellSize() {
@@ -69,6 +73,11 @@ public class Board extends JPanel {
 
         int x = (int) Math.floor((double) mousePos.x / gridCellSize) - 1;
         int y = (int) Math.floor((double) mousePos.y / gridCellSize) - 1;
+
+        // Constraining the mouse to the board
+        if (x < 0 || x >= 10 || y < 0 || y >= 10) {
+            return null;
+        }
 
         return new Coordinate(x, y);
     }
