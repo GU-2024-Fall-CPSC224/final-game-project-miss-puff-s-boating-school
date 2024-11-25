@@ -5,17 +5,23 @@ import java.awt.*;
 
 public class Info extends JPanel {
     
+    JLabel gameTitle = new JLabel();
+    JLabel statusDisplay = new JLabel();
+    
     /**
      * Constructor for painting?
      */
     public Info() {
         super();
 
+        
+
         // Setting the info Panel to have a box layout ( tile, textscreen, settings button, etc.)
         this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
 
         setBackground(Color.BLACK);
         addGameTitle();
+        addStatusDisplayScreen();
         
     }
 
@@ -43,15 +49,33 @@ public class Info extends JPanel {
     }
     */
 
+
+    /**
+     * addGameTitle() Adds the BATTLESHIP (C) title to the top of the main game panel.
+     */
     public void addGameTitle() {
-        JLabel newLabel = new JLabel();
         // Set object alignment inside the panel to the center of the panel.
-        newLabel.setAlignmentX( 0.5f );
+        this.gameTitle.setAlignmentX( 0.5f );
         Font font = new Font("Arial", Font.PLAIN, 42); // Set font size and style
-        newLabel.setForeground( Color.WHITE ); // Set font color.
-        newLabel.setFont( font ); // add the customized font to the label.
-        newLabel.setText( "BATTLESHIP" ); // Set label text.
-        this.add( newLabel );
+        this.gameTitle.setForeground( Color.WHITE ); // Set font color.
+        this.gameTitle.setFont( font ); // add the customized font to the label.
+        this.gameTitle.setText( "BATTLESHIP" ); // Set label text.
+        this.add( gameTitle );
+    }
+
+
+    /**
+     * addStatusDisplayScreen() adds the "display screen", which will tell both players when to setup,
+     * who's turn it is, etc.
+     */
+    public void addStatusDisplayScreen() {
+        // Set object alignment inside the panel to the center of the panel.
+        this.statusDisplay.setAlignmentX( 0.5f );
+        Font font = new Font("Arial", Font.PLAIN, 32); // Set font size and style
+        this.statusDisplay.setForeground( Color.WHITE ); // Set font color.
+        this.statusDisplay.setFont( font ); // add the customized font to the label.
+        this.statusDisplay.setText( "This is the text display field." ); // Set label text.
+        this.add( statusDisplay );
     }
     
 }
