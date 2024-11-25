@@ -7,6 +7,7 @@ public class Info extends JPanel {
     
     JLabel gameTitle = new JLabel();
     JLabel statusDisplay = new JLabel();
+    JButton settingsButton = new JButton();
     
     /**
      * Constructor for painting?
@@ -22,6 +23,7 @@ public class Info extends JPanel {
         setBackground(Color.BLACK);
         addGameTitle();
         addStatusDisplayScreen();
+        addSettingsButton();
         
     }
 
@@ -77,5 +79,21 @@ public class Info extends JPanel {
         this.statusDisplay.setText( "This is the text display field." ); // Set label text.
         this.add( statusDisplay );
     }
-    
+
+
+    /**
+     * addSettingsButton() adds a settings button which can be accessed to change various settings.
+     */
+    public void addSettingsButton() {
+        // Set object alignment inside the panel to the center of the panel.
+        this.settingsButton.setAlignmentX( 0.5f );
+        // Set object alignment to place the settings button at the bottom of the screen.
+        this.settingsButton.setAlignmentY(BOTTOM_ALIGNMENT);
+
+        Font font = new Font("Arial", Font.PLAIN, 32); // Set font size and style
+        this.settingsButton.setForeground( Color.BLACK ); // Set font color.
+        this.settingsButton.setFont( font ); // add the customized font to the label.
+        this.settingsButton.setText( "Settings" ); // Set label text.
+        this.add( settingsButton );
+    }
 }
