@@ -1,6 +1,7 @@
 package edu.gonzaga;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import edu.gonzaga.renderer.GameFrame;
 import edu.gonzaga.renderer.GamePanel;
@@ -18,6 +19,30 @@ public class Game implements Runnable, PlaceShipCallback {
      */
     Boolean gameOver = false;
 
+    Integer shipsPlaced = 0;
+
+    /**
+     * Tracks the current state of the game, which can be:
+     * 1. SETUP: Placing ships
+     * 2. PLAYER_1_TURN: Player 1's turn
+     * 3. PLAYER_2_TURN: Player 2's turn
+     * 4. GAMEOVER: The game has finished
+     */
+    public enum GameState {
+        SETUP,
+        PLAYER_1_TURN,
+        PLAYER_2_TURN,
+        GAMEOVER
+    }
+
+    Player player1 = new Player( "TEST PLAYER 1" );
+
+    Board leftBoard = new Board();
+    Board rightBoard = new Board();
+
+    GameFrame frame = new GameFrame();
+    GamePanel gamePanel = new GamePanel(leftBoard, rightBoard);
+
 
     // --------------------------------------
     //          Methods start here:
@@ -26,17 +51,12 @@ public class Game implements Runnable, PlaceShipCallback {
     @Override
     public void run() {
 
-        Player player1 = new Player( "TEST PLAYER 1" );
-
-        Board leftBoard = new Board();
-        Board rightBoard = new Board();
-
-        GameFrame frame = new GameFrame();
-        GamePanel gamePanel = new GamePanel(leftBoard, rightBoard);
+        
 
         frame.setActivePanel(gamePanel);
 
         //gamePanel.placeShip(Ship.shipType.CARRIER, 0, this);
+        
         runSetupPhase( player1, gamePanel );
 
 
@@ -47,12 +67,6 @@ public class Game implements Runnable, PlaceShipCallback {
 
         // While the game is not over 
         
-        /* 
-        while ( gameOver == false ) {
-            
-            // Setup phase:
-
-        }
         */ // < ------ RUnning this seems to cause the game to crash / infinite white screen of death?
 
         // Turns phase
@@ -63,7 +77,13 @@ public class Game implements Runnable, PlaceShipCallback {
 
     @Override
     public void onShipPlaced() {
-        System.out.println("Ship placed");
+        shipsPlaced++;
+        // If finished, return from this method.
+        if ( shipsPlaced >= 5 ) {
+            return;
+        }
+        // If fewer than 5 ships have been placed, simply call the placeship method again with the next ship ENUM.
+        gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ], this);
     }
 
 
@@ -72,15 +92,6 @@ public class Game implements Runnable, PlaceShipCallback {
      */
     public void runSetupPhase( Player currentPlayer, GamePanel gamePanel ) {
 
-        // determines when a player is finished palcing ships.
-        Boolean allShipsPlaced = false;
-
-        // Stores all the ship types for our player to pull ships from.
-        ArrayList<Ship.ShipType> ships = new ArrayList<>();
-        ships.add( Ship.ShipType.CARRIER );
-        ships.add( Ship.ShipType.CARRIER );
-        // All the needed ships would be listed here?
-
         // Tell the player it's their turn to set up ships!
         /*
          * I imagine we will need to add some sort of text display between the boards that tells the players when it's their turn,
@@ -88,12 +99,18 @@ public class Game implements Runnable, PlaceShipCallback {
          * component to do this? How do I access this?
          */
         
+        // values returns list of all ship types
+        // this states that on completion, callback to here.
+        gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ], this);
         // Place SHIPS!
-        for ( Ship.ShipType shipToPlace : ships ) {
+        
+    }
 
-            gamePanel.placeShip( shipToPlace, this); // It appears that calling this function does not pause the loop.
-            System.out.println( "Moving on to next ship..."); // I mean that all the ship type get passed before you even place one.
-        }
+
+    /**
+     * changeGameState() changes the state of the game.
+     */
+    public void changeGameState() {
 
     }
 }
