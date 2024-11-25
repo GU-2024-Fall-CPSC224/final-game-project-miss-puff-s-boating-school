@@ -174,8 +174,10 @@ public class Board {
             // If the collision ship has an intersecting point with your new ship, return false.
             for ( Coordinate coordinate : segmentCoordinates ) {
                 if ( collidingShipCoordinates.contains( coordinate ) ) {
+                    /*
                     System.out.println( "INVALID: ship collision detected at X-" 
                                         + coordinate.x() + " : Y-" + coordinate.y() );
+                     */
                     return false;
                 }
             }

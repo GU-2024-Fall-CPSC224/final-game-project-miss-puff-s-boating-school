@@ -55,23 +55,13 @@ public class Game implements Runnable, PlaceShipCallback {
     @Override
     public void run() {
 
-        
-
-        frame.setActivePanel(gamePanel);
-
-        //gamePanel.placeShip(Ship.shipType.CARRIER, 0, this);
-        
-        runSetupPhase( player1, gamePanel );
-
-        runSetupPhase( player2, gamePanel );
-
         // INTRO SCREEN:
 
         // Introduction / setup phase:
-
-        // While the game is not over 
-        
-        // < ------ RUnning this seems to cause the game to crash / infinite white screen of death?
+        frame.setActivePanel(gamePanel);
+        // Setup player 1 ships:
+        changeGameState( Game.GameState.PLAYER_1_SETUP );
+        runSetupPhase( player1, gamePanel );
 
         // Turns phase
 
@@ -87,6 +77,7 @@ public class Game implements Runnable, PlaceShipCallback {
             // If the first player has completed their setup, switch the game state to the second player's setup.
             if ( currentGameState == Game.GameState.PLAYER_1_SETUP ) {
                 changeGameState( Game.GameState.PLAYER_2_SETUP );
+                runSetupPhase( player2, gamePanel );
             }
             return;
         }
@@ -100,7 +91,6 @@ public class Game implements Runnable, PlaceShipCallback {
      */
     public void runSetupPhase( Player currentPlayer, GamePanel gamePanel ) {
 
-        changeGameState( Game.GameState.PLAYER_1_SETUP );
         // Tell the player it's their turn to set up ships!
         System.out.println( currentPlayer.getName() + ", it's your turn to set up!");
         /*
