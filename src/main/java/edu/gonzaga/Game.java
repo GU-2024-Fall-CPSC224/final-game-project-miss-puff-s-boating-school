@@ -28,12 +28,15 @@ public class Game implements Runnable, PlaceShipCallback {
      * 3. PLAYER_2_TURN: Player 2's turn
      * 4. GAMEOVER: The game has finished
      */
+    Game.GameState currentGameState;
     public enum GameState {
-        SETUP,
         PLAYER_1_TURN,
+        PLAYER_1_SETUP,
         PLAYER_2_TURN,
-        GAMEOVER
+        PLAYER_2_SETUP,
+        GAME_OVER
     }
+
 
     Player player1 = new Player( "TEST PLAYER 1" );
 
@@ -92,6 +95,7 @@ public class Game implements Runnable, PlaceShipCallback {
      */
     public void runSetupPhase( Player currentPlayer, GamePanel gamePanel ) {
 
+        changeGameState( Game.GameState.PLAYER_1_SETUP );
         // Tell the player it's their turn to set up ships!
         /*
          * I imagine we will need to add some sort of text display between the boards that tells the players when it's their turn,
@@ -110,7 +114,7 @@ public class Game implements Runnable, PlaceShipCallback {
     /**
      * changeGameState() changes the state of the game.
      */
-    public void changeGameState() {
-
+    public void changeGameState( Game.GameState newState ) {
+        currentGameState = newState;
     }
 }
