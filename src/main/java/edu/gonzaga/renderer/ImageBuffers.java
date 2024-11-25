@@ -24,9 +24,9 @@ public class ImageBuffers
         imageBuffers = new HashMap<>();
 
         loadShip("carrier");
-        loadShip("battle");
+        loadShip("battleship");
         loadShip("cruiser");
-        loadShip("sub");
+        loadShip("submarine");
         loadShip("destroyer");
 
         try {
