@@ -40,7 +40,7 @@ public class Board extends JPanel {
         }
 
         if (ghostShip != null) {
-            boolean valid = model.validateShipPlacement(ghostShip.getPosition(), ghostShip.isVertical(), ghostShip.getLength());
+            boolean valid = model.validateShipPlacement( ghostShip );
 
             drawShip((Graphics2D) g, valid ? Color.GREEN : Color.RED, ghostShip);
         }

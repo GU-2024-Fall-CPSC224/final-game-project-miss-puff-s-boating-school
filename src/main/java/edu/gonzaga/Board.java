@@ -98,7 +98,7 @@ public class Board {
     public void addShip(Ship newShip ){
 
         // If the ship is not placed in a valid location, return without adding the ship.
-        if ( validateShipPlacement( newShip.getPosition(), newShip.isVertical(), newShip.getLength() ) == false ) {
+        if ( validateShipPlacement( newShip ) == false ) {
             return;
         }
 
@@ -140,10 +140,11 @@ public class Board {
      * @param newShip
      * @return true / false the ship can be placed at these coordinates.
     */
-    public Boolean validateShipPlacement( Coordinate spaceChosen, Boolean vertical, Integer shipLength ){
+    //public Boolean validateShipPlacement( Coordinate spaceChosen, Boolean vertical, Integer shipLength ){
+    public Boolean validateShipPlacement( Ship checkShip ){
 
         // Generate a test ship:
-        Ship checkShip = new GenericShip( spaceChosen.x(), spaceChosen.y(), vertical, shipLength );
+        //Ship checkShip = new GenericShip( spaceChosen.x(), spaceChosen.y(), vertical, shipLength );
         
         // Get ship coordinates:
         ArrayList<Coordinate> segmentCoordinates = new ArrayList<>();

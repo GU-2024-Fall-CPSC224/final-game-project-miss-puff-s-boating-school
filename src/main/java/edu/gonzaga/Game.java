@@ -74,6 +74,7 @@ public class Game implements Runnable, PlaceShipCallback {
 
         // Stores all the ship types for our player to pull ships from.
         ArrayList<Ship.shipType> ships = new ArrayList<>();
+        ships.add( Ship.shipType.DESTROYER );
         ships.add( Ship.shipType.CARRIER );
 
         // Tell the player it's their turn to set up ships!

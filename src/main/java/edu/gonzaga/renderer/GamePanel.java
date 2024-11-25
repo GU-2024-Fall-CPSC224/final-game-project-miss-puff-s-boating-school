@@ -105,7 +105,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
                 return;
             }
 
-            if (getCurrentBoardModel().validateShipPlacement(ship.getPosition(), ship.isVertical(), ship.getLength())) {
+            if (getCurrentBoardModel().validateShipPlacement( ship )) {
                 getCurrentBoardModel().addShip(ship);
 
                 placingShip = false;

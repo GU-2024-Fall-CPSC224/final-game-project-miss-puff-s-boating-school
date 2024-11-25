@@ -115,7 +115,7 @@ public class BoardTest {
 
         // Check if the player's chosen space overlaps with a ship!
         System.out.println( "Expected boolean state is true: the ship can be placed." );
-        assertTrue( testBoard.validateShipPlacement( testShip.getPosition(), testShip.isVertical(), testShip.getLength() ) );
+        assertTrue( testBoard.validateShipPlacement( testShip ) );
     }
 
     @Test
@@ -129,7 +129,7 @@ public class BoardTest {
 
         // Check if the player's chosen space overlaps with a ship!
         System.out.println( "Expected boolean state is true: the ship can be placed." );
-        assertTrue( testBoard.validateShipPlacement( testShip.getPosition(), testShip.isVertical(), testShip.getLength() ) );
+        assertTrue( testBoard.validateShipPlacement( testShip ) );
     }
 
     @Test
@@ -143,7 +143,7 @@ public class BoardTest {
 
         // Check if the player's chosen space overlaps with a ship!
         System.out.println( "Expected boolean state is false: the ship cannot be placed." );
-        assertFalse( testBoard.validateShipPlacement( testShip.getPosition(), testShip.isVertical(), testShip.getLength() ) );
+        assertFalse( testBoard.validateShipPlacement( testShip ) );
     }
 
     @Test
@@ -157,7 +157,7 @@ public class BoardTest {
 
         // Check if the player's chosen space overlaps with a ship!
         System.out.println( "Expected boolean state is false: the ship cannot be placed." );
-        assertFalse( testBoard.validateShipPlacement( testShip.getPosition(), testShip.isVertical(), testShip.getLength() ) );
+        assertFalse( testBoard.validateShipPlacement( testShip ) );
     }
 
     @Test
@@ -171,7 +171,7 @@ public class BoardTest {
 
         // Check if the player's chosen space overlaps with a ship!
         System.out.println( "Expected boolean state is false: the ship cannot be placed." );
-        assertFalse( testBoard.validateShipPlacement( testShip.getPosition(), testShip.isVertical(), testShip.getLength() ) );
+        assertFalse( testBoard.validateShipPlacement( testShip ) );
     }
 
     @Test
@@ -189,7 +189,7 @@ public class BoardTest {
 
         // Check if the player's chosen space overlaps with a ship!
         System.out.println( "Expected boolean state is false: the ship cannot be placed." );
-        assertFalse( testBoard.validateShipPlacement( testShip.getPosition(), testShip.isVertical(), testShip.getLength() ) );
+        assertFalse( testBoard.validateShipPlacement( testShip ) );
     }
 
     // ---------------------------- ship sinking method checks -----------------------------
