@@ -145,6 +145,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     private void onMouseMoved(MouseEvent e) {
         updateGhostShip();
         updateGhostMarker();
+        repaint();
     }
 
     private Board getCurrentBoard() {
