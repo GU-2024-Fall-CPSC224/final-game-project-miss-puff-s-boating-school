@@ -95,11 +95,16 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
     @Override
     public void onActionTaken() {
 
+        /*
+         * Here we can add a looping if conditional that checks for when a win condition has been met. That
+         * being in this case when either of the players has no ships left on their board.
+         */
+
         if ( currentGameState == Game.GameState.PLAYER_1_TURN ) {
             changeGameState( Game.GameState.PLAYER_2_TURN);
             runTurnsPhase( player2, gamePanel );
         }
-        if ( currentGameState == Game.GameState.PLAYER_2_TURN ) {
+        else {
             changeGameState( Game.GameState.PLAYER_1_TURN);
             runTurnsPhase( player1, gamePanel );
         }

@@ -127,10 +127,11 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         if (takingAction) {
             Coordinate coord = getOppositeBoard().getCellMouseIsOver();
 
+            // If the current coordinate is not a space on the board, return.
             if (coord == null) {
                 return;
             }
-
+            // If the current coordinate is already marked, return.
             if (getOppositeBoardModel().isMarked(coord)) {
                 return;
             }
@@ -149,7 +150,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     }
 
     private Board getCurrentBoard() {
-        if (gameState == Game.GameState.PLAYER_1_SETUP || gameState == Game.GameState.PLAYER_1_TURN) {
+        if ( (gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN) ) {
             return leftBoard;
         } else {
             return rightBoard;
@@ -157,7 +158,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     }
 
     private Board getOppositeBoard() {
-        if (gameState == Game.GameState.PLAYER_1_SETUP || gameState == Game.GameState.PLAYER_1_TURN) {
+        if ( (gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN) ) {
             return rightBoard;
         } else {
             return leftBoard;
@@ -165,7 +166,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     }
 
     private edu.gonzaga.Board getCurrentBoardModel() {
-        if (gameState == Game.GameState.PLAYER_1_SETUP || gameState == Game.GameState.PLAYER_1_TURN) {
+        if ( (gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN) ) {
             return leftBoardModel;
         } else {
             return rightBoardModel;
@@ -173,7 +174,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     }
 
     private edu.gonzaga.Board getOppositeBoardModel() {
-        if (gameState == Game.GameState.PLAYER_1_SETUP || gameState == Game.GameState.PLAYER_1_TURN) {
+        if ( (gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN) ) {
             return rightBoardModel;
         } else {
             return leftBoardModel;
