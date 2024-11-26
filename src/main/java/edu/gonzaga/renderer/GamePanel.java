@@ -101,7 +101,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         placeShipCallback = callback;
     }
 
-    public void takeAction(TakeActionCallback callback) {
+    public void takeAction( TakeActionCallback callback) {
         takingAction = true;
         takeActionCallback = callback;
     }
@@ -243,5 +243,10 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         repaint();
+    }
+
+    public void takeAction(Game callback) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'takeAction'");
     }
 }

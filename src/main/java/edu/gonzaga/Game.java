@@ -6,6 +6,7 @@ import java.util.Arrays;
 import edu.gonzaga.renderer.GameFrame;
 import edu.gonzaga.renderer.GamePanel;
 import edu.gonzaga.renderer.PlaceShipCallback;
+import edu.gonzaga.renderer.TakeActionCallback;
 import edu.gonzaga.ships.Ship;
 
 public class Game implements Runnable, PlaceShipCallback {
@@ -60,6 +61,8 @@ public class Game implements Runnable, PlaceShipCallback {
 
         // Turns phase
 
+        
+
         // Ending screen
     }
 
@@ -76,7 +79,10 @@ public class Game implements Runnable, PlaceShipCallback {
                 changeGameState( Game.GameState.PLAYER_2_SETUP );
                 runSetupPhase( player2, gamePanel );
             }
-
+            if ( (currentGameState == Game.GameState.PLAYER_2_SETUP) ) {
+                //changeGameState( Game.GameState.PLAYER_1_TURN);
+                //gamePanel.takeAction( null );
+            }
             return;
         }
         // If fewer than 5 ships have been placed, simply call the placeship method again with the next ship ENUM.
@@ -96,15 +102,26 @@ public class Game implements Runnable, PlaceShipCallback {
          * how to rotate ship and place them, and other information. I notice that currently the text for the game uses a paint
          * component to do this? How do I access this?
          */
-        
-        // values returns list of all ship types
-        // this states that on completion, callback to here.
-        gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ], this);
+
         // Place SHIPS!
-        
+        gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ], this);
     }
 
 
+    /**
+     * runTurnsPhase() flips between player turn states while the user's attempt to mark
+     * their opponent's ships.
+     */
+    public void runTurnsPhase( Player currentPlayer, GamePanel gamePanel ) {
+        
+        // Tell the player it's their turn!
+        System.out.println( currentPlayer.getName() + ", it's your turn!");
+
+        // Check a space on the the enemy board!
+        gamePanel.takeAction( this );
+    }
+    
+    
     /**
      * changeGameState() changes the state of the game.
      */
