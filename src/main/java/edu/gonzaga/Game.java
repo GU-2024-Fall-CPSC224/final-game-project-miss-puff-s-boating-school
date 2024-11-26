@@ -9,7 +9,7 @@ import edu.gonzaga.renderer.PlaceShipCallback;
 import edu.gonzaga.renderer.TakeActionCallback;
 import edu.gonzaga.ships.Ship;
 
-public class Game implements Runnable, PlaceShipCallback {
+public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
     
     // --------------------------------------
     //         Attributes are here:
@@ -74,19 +74,37 @@ public class Game implements Runnable, PlaceShipCallback {
         if ( shipsPlaced >= 5 ) {
             shipsPlaced = 0;
 
+            // If both players have finished setting up, then move to the turns phase.
+            if ( (currentGameState == Game.GameState.PLAYER_2_SETUP) ) {
+                changeGameState( Game.GameState.PLAYER_1_TURN);
+                runTurnsPhase( player1, gamePanel );
+            }
             // If the first player has completed their setup, switch the game state to the second player's setup.
             if ( currentGameState == Game.GameState.PLAYER_1_SETUP ) {
                 changeGameState( Game.GameState.PLAYER_2_SETUP );
                 runSetupPhase( player2, gamePanel );
-            }
-            if ( (currentGameState == Game.GameState.PLAYER_2_SETUP) ) {
-                //changeGameState( Game.GameState.PLAYER_1_TURN);
-                //gamePanel.takeAction( null );
+                // Set the shipsPlaced Integer to zero here as well.
             }
             return;
         }
         // If fewer than 5 ships have been placed, simply call the placeship method again with the next ship ENUM.
         gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ], this);
+    }
+
+
+    @Override
+    public void onActionTaken() {
+
+        if ( currentGameState == Game.GameState.PLAYER_1_TURN ) {
+            changeGameState( Game.GameState.PLAYER_2_TURN);
+            runTurnsPhase( player2, gamePanel );
+        }
+        if ( currentGameState == Game.GameState.PLAYER_2_TURN ) {
+            changeGameState( Game.GameState.PLAYER_1_TURN);
+            runTurnsPhase( player1, gamePanel );
+        }
+        gamePanel.takeAction( this );
+        return;
     }
 
 

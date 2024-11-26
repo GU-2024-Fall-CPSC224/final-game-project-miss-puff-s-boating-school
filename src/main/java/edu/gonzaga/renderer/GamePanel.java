@@ -244,9 +244,4 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         repaint();
     }
-
-    public void takeAction(Game callback) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'takeAction'");
-    }
 }
