@@ -15,10 +15,11 @@ public class Info extends JPanel {
     public Info() {
         super();
 
-        
+        // add(westPanel, BorderLayout.WEST); < Reference code.
 
         // Setting the info Panel to have a box layout ( tile, textscreen, settings button, etc.)
-        this.setLayout( new BoxLayout( this, BoxLayout.Y_AXIS ) );
+        this.setLayout( new BorderLayout() );
+        this.setAlignmentX( 0.5f );
 
         setBackground(Color.BLACK);
         addGameTitle();
@@ -62,7 +63,8 @@ public class Info extends JPanel {
         this.gameTitle.setForeground( Color.WHITE ); // Set font color.
         this.gameTitle.setFont( font ); // add the customized font to the label.
         this.gameTitle.setText( "BATTLESHIP" ); // Set label text.
-        this.add( gameTitle );
+        this.add( gameTitle, BorderLayout.NORTH );
+        
     }
 
 
@@ -77,7 +79,7 @@ public class Info extends JPanel {
         this.statusDisplay.setForeground( Color.WHITE ); // Set font color.
         this.statusDisplay.setFont( font ); // add the customized font to the label.
         this.statusDisplay.setText( "This is the text display field." ); // Set label text.
-        this.add( statusDisplay );
+        this.add( statusDisplay, BorderLayout.CENTER );
     }
 
 
@@ -94,6 +96,6 @@ public class Info extends JPanel {
         this.settingsButton.setForeground( Color.BLACK ); // Set font color.
         this.settingsButton.setFont( font ); // add the customized font to the label.
         this.settingsButton.setText( "Settings" ); // Set label text.
-        this.add( settingsButton );
+        this.add( settingsButton, BorderLayout.SOUTH );
     }
 }

@@ -108,7 +108,7 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
             changeGameState( Game.GameState.PLAYER_1_TURN);
             runTurnsPhase( player1, gamePanel );
         }
-        gamePanel.takeAction( this );
+        //gamePanel.takeAction( this );
         return;
     }
 
