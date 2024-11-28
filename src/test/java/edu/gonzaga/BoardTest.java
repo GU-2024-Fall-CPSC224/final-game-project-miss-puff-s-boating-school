@@ -203,6 +203,7 @@ public class BoardTest {
 
         // Create a test ship for the board, facing downward and starting at coordinate [5, 5]:
         Ship testShip = new GenericShip(4, 4, true, 4);
+        testBoard.addShip(testShip);
 
         // Hit boat segments:
         for ( int i = 0; i < 4; i++ ) {
@@ -213,7 +214,7 @@ public class BoardTest {
 
         // Check if isShipSunk() recognizses that a ship has been sunk:
         System.out.println( "Expected state is true: A ship has been sunk." );
-        assertTrue( testBoard.isShipSunk( testShip ) );
+        assertTrue( testShip.getIsSunk() );
     }
 
     @Test
@@ -224,6 +225,7 @@ public class BoardTest {
 
         // Create a test ship for the board, facing downward and starting at coordinate [5, 5]:
         Ship testShip = new GenericShip(4, 4, true, 4);
+        testBoard.addShip(testShip);
 
         // Hit boat segments:
         for ( int i = 0; i < 4; i++ ) {
@@ -234,6 +236,6 @@ public class BoardTest {
 
         // Check if isShipSunk() recognizses that a ship has been sunk:
         System.out.println( "Expected state is false: A ship has not been sunk." );
-        assertFalse( testBoard.isShipSunk( testShip ) );
+        assertFalse(testShip.getIsSunk() );
     }
 }

@@ -15,6 +15,7 @@ public class GenericShip extends Ship {
 
     @Override
     public ShipType getType() {
-        throw new UnsupportedOperationException("Generic ship does not have a type.");
+        // Because this is a generic ship, we don't know what type it is
+        return null;
     }
 }

@@ -131,4 +131,8 @@ public abstract class Ship {
         return shipCoordinates;
     }
 
+    @Override
+    public String toString() {
+        return (isVertical ? "Vertical " : "Horizontal ") + getType() + " at " + position;
+    }
 }

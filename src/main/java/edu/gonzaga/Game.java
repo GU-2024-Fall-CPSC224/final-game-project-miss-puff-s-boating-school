@@ -50,14 +50,16 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
     
     @Override
     public void run() {
+        System.out.println("Running game...");
 
         // INTRO SCREEN:
 
         // Introduction / setup phase:
+        System.out.println("Going to game panel...");
         frame.setActivePanel(gamePanel);
         // Setup player 1 ships:
         changeGameState( Game.GameState.PLAYER_1_SETUP );
-        runSetupPhase( player1, gamePanel );
+        runSetupPhase( gamePanel );
 
         // Turns phase
 
@@ -66,27 +68,31 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
         // Ending screen
     }
 
-
     @Override
     public void onShipPlaced() {
         shipsPlaced++;
+
         // If finished, return from this method.
         if ( shipsPlaced >= 5 ) {
             shipsPlaced = 0;
 
+            System.out.println("All ships placed.");
+
             // If both players have finished setting up, then move to the turns phase.
             if ( (currentGameState == Game.GameState.PLAYER_2_SETUP) ) {
                 changeGameState( Game.GameState.PLAYER_1_TURN);
-                runTurnsPhase( player1, gamePanel );
+                runTurnsPhase( gamePanel );
             }
             // If the first player has completed their setup, switch the game state to the second player's setup.
             if ( currentGameState == Game.GameState.PLAYER_1_SETUP ) {
                 changeGameState( Game.GameState.PLAYER_2_SETUP );
-                runSetupPhase( player2, gamePanel );
+                runSetupPhase( gamePanel );
                 // Set the shipsPlaced Integer to zero here as well.
             }
+
             return;
         }
+
         // If fewer than 5 ships have been placed, simply call the placeship method again with the next ship ENUM.
         gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ], this);
     }
@@ -102,24 +108,22 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
 
         if ( currentGameState == Game.GameState.PLAYER_1_TURN ) {
             changeGameState( Game.GameState.PLAYER_2_TURN);
-            runTurnsPhase( player2, gamePanel );
+            runTurnsPhase( gamePanel );
         }
         else {
             changeGameState( Game.GameState.PLAYER_1_TURN);
-            runTurnsPhase( player1, gamePanel );
+            runTurnsPhase( gamePanel );
         }
-        //gamePanel.takeAction( this );
-        return;
     }
 
 
     /** 
      * runSetupPhase() requires both players to place all five of their ships on their board.
      */
-    public void runSetupPhase( Player currentPlayer, GamePanel gamePanel ) {
+    public void runSetupPhase(GamePanel gamePanel ) {
 
-        // Tell the player it's their turn to set up ships!
-        System.out.println( currentPlayer.getName() + ", it's your turn to set up!");
+
+
         /*
          * I imagine we will need to add some sort of text display between the boards that tells the players when it's their turn,
          * how to rotate ship and place them, and other information. I notice that currently the text for the game uses a paint
@@ -135,11 +139,7 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
      * runTurnsPhase() flips between player turn states while the user's attempt to mark
      * their opponent's ships.
      */
-    public void runTurnsPhase( Player currentPlayer, GamePanel gamePanel ) {
-        
-        // Tell the player it's their turn!
-        System.out.println( currentPlayer.getName() + ", it's your turn!");
-
+    public void runTurnsPhase(GamePanel gamePanel ) {
         // Check a space on the the enemy board!
         gamePanel.takeAction( this );
     }
@@ -149,6 +149,7 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
      * changeGameState() changes the state of the game.
      */
     public void changeGameState( Game.GameState newState ) {
+        System.out.println("Game state changed to: " + newState);
         currentGameState = newState;
         gamePanel.setGameState( newState );
     }
