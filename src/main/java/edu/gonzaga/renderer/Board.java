@@ -56,12 +56,18 @@ public class Board extends JPanel {
         }
 
         if (ghostMarker != null) {
-            drawMarker(g, ghostMarker.x() + 1, ghostMarker.y() + 1, false);
-        }
-    }
+            if (model.isMarked(ghostMarker)) {
+                g.setColor(new Color(255, 0, 0, 128));
+            } else {
+                g.setColor(new Color(0, 255, 0, 128));
+            }
 
-    public int getGridCellSize() {
-        return gridCellSize;
+            g.fillRect(
+                    (ghostMarker.x() + 1) * gridCellSize,
+                    (ghostMarker.y() + 1) * gridCellSize,
+                    gridCellSize,
+                    gridCellSize);
+        }
     }
 
     public Coordinate getCellMouseIsOver() {
@@ -116,14 +122,14 @@ public class Board extends JPanel {
             g.translate(-gridCellSize, 0);
         }
 
-        BufferedImage img;
+        Image img;
 
         if (color == Color.RED) {
-            img = ImageBuffers.getInstance().getImage(ship.getType().name().toLowerCase() + "-red");
+            img = ImageBuffers.getInstance().getShipImage(ship.getType(), "red");
         } else if (color == Color.GREEN) {
-            img = ImageBuffers.getInstance().getImage(ship.getType().name().toLowerCase() + "-green");
+            img = ImageBuffers.getInstance().getShipImage(ship.getType(), "green");
         } else {
-            img = ImageBuffers.getInstance().getImage(ship.getType().name().toLowerCase());
+            img = ImageBuffers.getInstance().getShipImage(ship.getType(), null);
         }
 
         g.drawImage(img,
@@ -136,9 +142,10 @@ public class Board extends JPanel {
         g.setTransform(prevTransform);
     }
 
+
     private void drawMarker(Graphics g, int x, int y, boolean hit) {
-        BufferedImage hitImage = ImageBuffers.getInstance().getImage("hit");
-        BufferedImage missImage = ImageBuffers.getInstance().getImage("miss");
+        Image hitImage = ImageBuffers.getInstance().getImage("hit");
+        Image missImage = ImageBuffers.getInstance().getImage("miss");
 
         g.drawImage(hit ? hitImage : missImage,
                 x * gridCellSize,

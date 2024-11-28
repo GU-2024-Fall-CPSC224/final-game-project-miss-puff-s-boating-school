@@ -1,5 +1,7 @@
 package edu.gonzaga.renderer;
 
+import edu.gonzaga.ships.Ship;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -8,7 +10,8 @@ import java.util.HashMap;
 
 public class ImageBuffers
 {
-    private final HashMap<String, BufferedImage> imageBuffers;
+    private static final String[] SHIP_NAMES = {"carrier", "battleship", "cruiser", "submarine", "destroyer"};
+    private final HashMap<String, Image> imageBuffers;
 
     public static final ImageBuffers instance = new ImageBuffers();
 
@@ -16,18 +19,26 @@ public class ImageBuffers
         return instance;
     }
 
-    public BufferedImage getImage(String name) {
+    public Image getImage(String name) {
         return imageBuffers.get(name);
+    }
+
+    public Image getShipImage(Ship.ShipType type, String suffix) {
+        String key = type.name().toLowerCase();
+
+        if (suffix != null) {
+            key += "-" + suffix;
+        }
+
+        return imageBuffers.get(key);
     }
 
     private ImageBuffers() {
         imageBuffers = new HashMap<>();
 
-        loadShip("carrier");
-        loadShip("battleship");
-        loadShip("cruiser");
-        loadShip("submarine");
-        loadShip("destroyer");
+        for (String name : SHIP_NAMES) {
+            loadShip(name);
+        }
 
         try {
             imageBuffers.put("hit", ImageIO.read(new File("res/board/hit.png")));
@@ -41,7 +52,6 @@ public class ImageBuffers
         try {
             BufferedImage base = ImageIO.read(new File("res/ships/" + name + ".png"));
 
-            imageBuffers.put(name + "-base", base);
             imageBuffers.put(name, tint(base, Color.WHITE));
             imageBuffers.put(name + "-red", tint(base, Color.RED));
             imageBuffers.put(name + "-green", tint(base, Color.GREEN));
