@@ -40,9 +40,6 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         this.leftBoardModel = leftBoardModel;
         this.rightBoardModel = rightBoardModel;
 
-        leftBoardModel.pcs.addPropertyChangeListener(this);
-        rightBoardModel.pcs.addPropertyChangeListener(this);
-
         setLayout(new BattleshipLayout());
 
         leftBoard = new Board(leftBoardModel);
@@ -59,6 +56,11 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
         rightShips = new Ships(rightBoardModel);
         add("rightShips", rightShips);
+
+        leftBoardModel.pcs.addPropertyChangeListener(this);
+        leftBoardModel.pcs.addPropertyChangeListener(leftShips);
+        rightBoardModel.pcs.addPropertyChangeListener(this);
+        rightBoardModel.pcs.addPropertyChangeListener(rightShips);
 
         mouseAdapter = new MouseAdapter() {
             @Override

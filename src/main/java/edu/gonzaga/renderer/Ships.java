@@ -4,11 +4,13 @@ import edu.gonzaga.ships.Ship;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Displays the ships the player has using a scrollable grid.
  */
-public class Ships extends JScrollPane {
+public class Ships extends JScrollPane implements PropertyChangeListener {
     edu.gonzaga.Board board;
     JPanel container;
 
@@ -21,15 +23,26 @@ public class Ships extends JScrollPane {
         container.setLayout(new GridLayout(0, 1, 0, 10));
         container.setBackground(Color.BLACK);
 
+        updateShips();
+
+        setViewportView(container);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        updateShips();
+        revalidate();
+    }
+
+    private void updateShips() {
+        container.removeAll();
+
         for (Ship ship : board.getShips()) {
-            ShipCard card = new ShipCard(ship);
-            container.add(card);
+            container.add(new ShipCard(ship));
         }
 
         int numShips = board.getShips().length;
 
         container.setPreferredSize(new Dimension(0, numShips * 70 + (numShips - 1) * 10));
-
-        setViewportView(container);
     }
 }
