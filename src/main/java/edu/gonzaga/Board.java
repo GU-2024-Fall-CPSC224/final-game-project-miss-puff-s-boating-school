@@ -2,6 +2,7 @@ package edu.gonzaga;
 
 import edu.gonzaga.ships.Ship;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 
@@ -14,6 +15,8 @@ public class Board {
 
     // BOARD_SIZE holds the current size of the board in both rows and columns
     private static final int BOARD_SIZE = 10;
+
+    public final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     // shipList stores all ships placed on the player's board.
     private ArrayList<Ship> shipList;
@@ -75,6 +78,8 @@ public class Board {
                 System.out.println("Marker at " + playerCoord + " hit " + attackedShip);
             }
         }
+
+        pcs.firePropertyChange("mark", null, null);
     }
 
     /**
@@ -91,6 +96,8 @@ public class Board {
 
         // The placement of the ship is valid, add it to the list.
         shipList.add( newShip );
+
+        pcs.firePropertyChange("ship", null, null);
     }
     /** getter function of the ship on a given tile
      * searches location by checking every single coordinate of the ships 

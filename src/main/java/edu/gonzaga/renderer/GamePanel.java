@@ -40,6 +40,9 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         this.leftBoardModel = leftBoardModel;
         this.rightBoardModel = rightBoardModel;
 
+        leftBoardModel.pcs.addPropertyChangeListener(this);
+        rightBoardModel.pcs.addPropertyChangeListener(this);
+
         setLayout(new BattleshipLayout());
 
         leftBoard = new Board(leftBoardModel);
@@ -151,7 +154,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     private void onMouseMoved(MouseEvent e) {
         updateGhostShip();
         updateGhostMarker();
-        repaint();
+//        repaint();
     }
 
     private Board getCurrentBoard() {
@@ -191,15 +194,8 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
             return;
         }
 
-        if (gameState == Game.GameState.PLAYER_1_SETUP) {
-            leftBoard.ghostShip = constructGhostShip(leftBoard);
-
-            leftBoard.repaint();
-        } else {
-            rightBoard.ghostShip = constructGhostShip(rightBoard);
-
-            rightBoard.repaint();
-        }
+        getCurrentBoard().ghostShip = constructGhostShip(getCurrentBoard());
+        getCurrentBoard().repaint();
     }
 
     private void updateGhostMarker() {
@@ -207,14 +203,8 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
             return;
         }
 
-        // Show the ghost on the other board
-        if (gameState == Game.GameState.PLAYER_1_TURN) {
-            rightBoard.ghostMarker = rightBoard.getCellMouseIsOver();
-            rightBoard.repaint();
-        } else {
-            leftBoard.ghostMarker = leftBoard.getCellMouseIsOver();
-            leftBoard.repaint();
-        }
+        getOppositeBoard().ghostMarker = getOppositeBoard().getCellMouseIsOver();
+        getOppositeBoard().repaint();
     }
 
     private Ship constructGhostShip(Board board) {
