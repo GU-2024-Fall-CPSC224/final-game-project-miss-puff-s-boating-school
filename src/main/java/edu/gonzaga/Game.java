@@ -98,14 +98,17 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
     }
 
 
+    /**
+     * onActionTaken() runs during the turns phase where players are checking spaces. Each time a space is
+     * checked, this functino will check who's turn it currently is, and set the turn phase to the other player,
+     * before running another call to runTurnsPhase.
+     */
     @Override
     public void onActionTaken() {
 
-        /*
-         * Here we can add a looping if conditional that checks for when a win condition has been met. That
-         * being in this case when either of the players has no ships left on their board.
-         */
+        
 
+        // Check who's turn it is, and swap the game state to the other player, switching the turn.
         if ( currentGameState == Game.GameState.PLAYER_1_TURN ) {
             changeGameState( Game.GameState.PLAYER_2_TURN);
             runTurnsPhase( gamePanel );

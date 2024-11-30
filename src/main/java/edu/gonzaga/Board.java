@@ -178,4 +178,24 @@ public class Board {
     public boolean isMarkerHit( Coordinate playerCoord ){
         return getShip( playerCoord ) != null;
     }
+
+
+    /**
+     * checkAllShipsSunk() takes in a player board and determines if all ships placed on that
+     * board have been sunk.
+     * 
+     * @param playerBoard the board being checked.
+     * @return true/false whether all ships have been sunk.
+     */
+    public Boolean checkAllShipsSunk() {
+        // Check each ship in the shipList!
+        for ( Ship shipChecked : shipList ) {
+            // If any ship has not been sunk, return false.
+            if ( shipChecked.getIsSunk() == false ) {
+                return false;
+            }
+        }
+        // All ships have been sunk.
+        return true;
+    }
 }
