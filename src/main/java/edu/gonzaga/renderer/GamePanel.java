@@ -143,6 +143,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
             getOppositeBoard().ghostMarker = null;
             getOppositeBoardModel().setMarked(coord);
+            info.displayPlayerHit( getOppositeBoardModel().isMarkerHit(coord) );
 
             /*
              * Here we would need to indicate to the display field that there was a hit, maybe?

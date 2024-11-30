@@ -1,6 +1,9 @@
 package edu.gonzaga.renderer;
 
 import javax.swing.*;
+
+import edu.gonzaga.Player;
+
 import java.awt.*;
 
 public class Info extends JPanel {
@@ -97,5 +100,20 @@ public class Info extends JPanel {
         this.settingsButton.setFont( font ); // add the customized font to the label.
         this.settingsButton.setText( "Settings" ); // Set label text.
         this.add( settingsButton, BorderLayout.SOUTH );
+    }
+
+
+    /**
+     * displayPlayerHit() updates the statusDisplayScreen to whether the current player's most
+     * recent space check was a hit or a miss.
+     */
+    public void displayPlayerHit( Boolean isHit ) {
+        // If the space check was a hit, display:
+        if ( isHit == true ) {
+            statusDisplay.setText( "< HIT >" );
+            return;
+        }
+        // Otherwise, display:
+        statusDisplay.setText( "< MISS >");
     }
 }
