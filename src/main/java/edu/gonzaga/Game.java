@@ -106,7 +106,8 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
     @Override
     public void onActionTaken() {
 
-        
+        // Check if the game is over.
+        checkGameIsOver();
 
         // Check who's turn it is, and swap the game state to the other player, switching the turn.
         if ( currentGameState == Game.GameState.PLAYER_1_TURN ) {
@@ -155,5 +156,24 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
         System.out.println("Game state changed to: " + newState);
         currentGameState = newState;
         gamePanel.setGameState( newState );
+    }
+
+
+    /**
+     * checkGameIsOver() determines if all the ships on either board have been sunk. If true,
+     * then the game switches to the ending screen, with the winning player displayed.
+     */
+    private void checkGameIsOver() {
+
+        // Check if player 1 has no ships:
+        if ( leftBoard.checkAllShipsSunk() == true ) {
+            System.out.println( "Player 1 has no ships! Player 2 Wins!" );
+            currentGameState = GameState.GAME_OVER;
+        }
+        // Check if player 2 has no ships:
+        if ( rightBoard.checkAllShipsSunk() == true ) {
+            System.out.println( "Player 2 has no ships! Player 1 Wins!" );
+            currentGameState = GameState.GAME_OVER;
+        }
     }
 }
