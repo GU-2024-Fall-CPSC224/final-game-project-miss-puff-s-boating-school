@@ -38,7 +38,9 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
     public GamePanel(GamePanelCallbacks callbacks,
                      edu.gonzaga.Board leftBoardModel,
-                     edu.gonzaga.Board rightBoardModel) {
+                     edu.gonzaga.Board rightBoardModel,
+                     edu.gonzaga.Player player1,
+                     edu.gonzaga.Player player2) {
         super();
 
         this.callbacks = callbacks;
@@ -54,7 +56,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         rightBoard = new Board(rightBoardModel);
         add("rightBoard", rightBoard);
 
-        info = new Info();
+        info = new Info( player1, player2 );
         add("info", info);
 
         leftShips = new Ships(leftBoardModel);
@@ -103,6 +105,8 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
     public void setGameState(Game.GameState gameState) {
         this.gameState = gameState;
+        // While setting up, Change display based on player setup.:
+        info.displayPlayerSetup( gameState );
     }
 
     public void placeShip(Ship.ShipType type) {
@@ -129,6 +133,8 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
                 getCurrentBoard().ghostShip = null;
                 placingShip = false;
+                // Display who's turn it is to setup ships:
+
                 callbacks.onShipPlaced();
             }
         }
@@ -147,13 +153,10 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
             getOppositeBoard().ghostMarker = null;
             getOppositeBoardModel().setMarked(coord);
-            info.displayPlayerHit(getOppositeBoardModel().isMarkerHit(coord));
-
-            /*
-             * Here we would need to indicate to the display field that there was a hit, maybe?
-             */
 
             takingAction = false;
+            // Display checked space result, and that it is now the other player's turn.
+            info.displayPlayerTurn( gameState, getOppositeBoardModel().isMarkerHit(coord) );
             callbacks.onActionTaken();
         }
     }

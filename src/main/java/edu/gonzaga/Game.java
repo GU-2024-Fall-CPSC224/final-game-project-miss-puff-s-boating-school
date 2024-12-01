@@ -36,7 +36,7 @@ public class Game implements Runnable, GamePanelCallbacks, EndPanelCallbacks {
     Board rightBoard = new Board();
 
     GameFrame frame = new GameFrame();
-    GamePanel gamePanel = new GamePanel(this, leftBoard, rightBoard);
+    GamePanel gamePanel = new GamePanel( this, leftBoard, rightBoard, player1, player2 );
 
 
     // --------------------------------------

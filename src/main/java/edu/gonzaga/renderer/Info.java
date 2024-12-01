@@ -2,12 +2,20 @@ package edu.gonzaga.renderer;
 
 import javax.swing.*;
 
+import edu.gonzaga.Game;
 import edu.gonzaga.Player;
+import edu.gonzaga.Game.GameState;
 
 import java.awt.*;
 
 public class Info extends JPanel {
     
+    /*
+     * Holds the player names
+     */
+    Player player1;
+    Player player2;
+
     JLabel gameTitle = new JLabel();
     JLabel statusDisplay = new JLabel();
     JButton settingsButton = new JButton();
@@ -15,8 +23,11 @@ public class Info extends JPanel {
     /**
      * Constructor for painting?
      */
-    public Info() {
+    public Info( Player player1, Player player2 ) {
         super();
+
+        this.player1 = player1;
+        this.player2 = player2;
 
         // add(westPanel, BorderLayout.WEST); < Reference code.
 
@@ -115,5 +126,53 @@ public class Info extends JPanel {
         }
         // Otherwise, display:
         statusDisplay.setText( "< MISS >");
+    }
+
+
+    /**
+     * displayPlayerHit() updates the statusDisplayScreen to whether the current player's most
+     * recent space check was a hit or a miss.
+     */
+    public void displayPlayerTurn( Game.GameState gameState, Boolean isHit ) {
+        
+        String checkText = "";
+        
+        // Display hit/miss status:
+        if ( isHit == true ) {
+            statusDisplay.setText( "HIT." );
+        }
+        else {
+            statusDisplay.setText( "MISS." );
+        }
+        checkText = statusDisplay.getText(); 
+        // Determine player turn display:
+        if ( gameState == Game.GameState.PLAYER_2_TURN ) {
+            statusDisplay.setText( "<html><head><style>p{text-align: center;}<p>" + checkText + "<br/><br/> IT IS NOW <br/>" 
+                                    + player2.getName() + "'S<br/> TURN.</p></html>" );
+            return;
+        }
+        // Otherwise, display:
+        if ( gameState == Game.GameState.PLAYER_1_TURN ) {
+            statusDisplay.setText( "<html><head><style>p{text-align: center;}<p>" + checkText + "<br/><br/> IT IS NOW <br/>" 
+                                    + player1.getName() + "'S<br/> TURN.</p></html>" );
+            return;
+        }
+    }
+
+
+    /**
+     * displayPlayerSetup() updats the text display screen with who's turn it is to setup ships.
+     */
+    public void displayPlayerSetup( Game.GameState gameState ) {
+        // Check for player 2's setup.
+        if ( gameState == Game.GameState.PLAYER_2_SETUP ) {
+            // Otherwise, display:
+            statusDisplay.setText( "<html><head><style>p{text-align: center;}<p>IT IS NOW<br/>" + player2.getName() +
+                                    "'S<br/> TURN. SET UP BATTLESHIPS.</p></html>" );
+        }
+        if ( gameState == Game.GameState.PLAYER_1_SETUP ) {
+            statusDisplay.setText( "<html><head><style>p{text-align: center;}<p>IT IS NOW<br/>" + player1.getName() +
+                                    "'S<br/> TURN. SET UP BATTLESHIPS.</p></html>" );
+        }
     }
 }
