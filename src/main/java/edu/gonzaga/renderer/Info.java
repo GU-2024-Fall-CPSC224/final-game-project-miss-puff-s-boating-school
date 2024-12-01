@@ -148,13 +148,13 @@ public class Info extends JPanel {
         // Determine player turn display:
         if ( gameState == Game.GameState.PLAYER_2_TURN ) {
             statusDisplay.setText( "<html><head><style>p{text-align: center;}<p>" + checkText + "<br/><br/> IT IS NOW <br/>" 
-                                    + player2.getName() + "'S<br/> TURN.</p></html>" );
+                                    + player1.getName() + "'S<br/> TURN.</p></html>" );
             return;
         }
         // Otherwise, display:
         if ( gameState == Game.GameState.PLAYER_1_TURN ) {
             statusDisplay.setText( "<html><head><style>p{text-align: center;}<p>" + checkText + "<br/><br/> IT IS NOW <br/>" 
-                                    + player1.getName() + "'S<br/> TURN.</p></html>" );
+                                    + player2.getName() + "'S<br/> TURN.</p></html>" );
             return;
         }
     }
