@@ -3,7 +3,7 @@ package edu.gonzaga;
 import edu.gonzaga.renderer.*;
 import edu.gonzaga.ships.Ship;
 
-public class Game implements Runnable, GamePanelCallbacks {
+public class Game implements Runnable, GamePanelCallbacks, EndPanelCallbacks {
     
     // --------------------------------------
     //         Attributes are here:
@@ -19,6 +19,7 @@ public class Game implements Runnable, GamePanelCallbacks {
      * 4. GAMEOVER: The game has finished
      */
     Game.GameState currentGameState;
+
     public enum GameState {
         PLAYER_1_TURN,
         PLAYER_1_SETUP,
@@ -114,6 +115,15 @@ public class Game implements Runnable, GamePanelCallbacks {
         }
     }
 
+    @Override
+    public void endPanelOnRestart() {
+        System.out.println("Restarting game...");
+    }
+
+    @Override
+    public void endPanelOnMainMenu() {
+        System.out.println("Returning to main menu...");
+    }
 
     /** 
      * runSetupPhase() requires both players to place all five of their ships on their board.
@@ -160,14 +170,18 @@ public class Game implements Runnable, GamePanelCallbacks {
     private void checkGameIsOver() {
 
         // Check if player 1 has no ships:
-        if ( leftBoard.checkAllShipsSunk() == true ) {
-            System.out.println( "Player 1 has no ships! Player 2 Wins!" );
+        if (leftBoard.checkAllShipsSunk()) {
+            System.out.println("Player 1 has no ships left. Moving to end screen.");
             currentGameState = GameState.GAME_OVER;
+
+            frame.setActivePanel(new EndPanel(this, player2));
         }
         // Check if player 2 has no ships:
-        if ( rightBoard.checkAllShipsSunk() == true ) {
-            System.out.println( "Player 2 has no ships! Player 1 Wins!" );
+        if (rightBoard.checkAllShipsSunk()) {
+            System.out.println("Player 2 has no ships left. Moving to end screen.");
             currentGameState = GameState.GAME_OVER;
+
+            frame.setActivePanel(new EndPanel(this, player1));
         }
     }
 }
