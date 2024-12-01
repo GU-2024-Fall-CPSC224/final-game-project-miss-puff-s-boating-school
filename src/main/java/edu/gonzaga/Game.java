@@ -1,15 +1,9 @@
 package edu.gonzaga;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import edu.gonzaga.renderer.GameFrame;
-import edu.gonzaga.renderer.GamePanel;
-import edu.gonzaga.renderer.PlaceShipCallback;
-import edu.gonzaga.renderer.TakeActionCallback;
+import edu.gonzaga.renderer.*;
 import edu.gonzaga.ships.Ship;
 
-public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
+public class Game implements Runnable, GamePanelCallbacks {
     
     // --------------------------------------
     //         Attributes are here:
@@ -41,7 +35,7 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
     Board rightBoard = new Board();
 
     GameFrame frame = new GameFrame();
-    GamePanel gamePanel = new GamePanel(leftBoard, rightBoard);
+    GamePanel gamePanel = new GamePanel(this, leftBoard, rightBoard);
 
 
     // --------------------------------------
@@ -94,7 +88,7 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
         }
 
         // If fewer than 5 ships have been placed, simply call the placeship method again with the next ship ENUM.
-        gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ], this);
+        gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ]);
     }
 
 
@@ -135,7 +129,7 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
          */
 
         // Place SHIPS!
-        gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ], this);
+        gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ]);
     }
 
 
@@ -145,7 +139,7 @@ public class Game implements Runnable, PlaceShipCallback, TakeActionCallback {
      */
     public void runTurnsPhase(GamePanel gamePanel ) {
         // Check a space on the the enemy board!
-        gamePanel.takeAction( this );
+        gamePanel.takeAction();
     }
     
     

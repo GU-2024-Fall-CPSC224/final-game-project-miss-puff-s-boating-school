@@ -15,13 +15,13 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
     private Game.GameState gameState;
 
+    private GamePanelCallbacks callbacks;
+
     private boolean placingShip;
     private Ship.ShipType currentShipType;
     private boolean currentShipVertical;
-    private PlaceShipCallback placeShipCallback;
 
     private boolean takingAction;
-    private TakeActionCallback takeActionCallback;
 
     private Board leftBoard;
     private Board rightBoard;
@@ -29,13 +29,19 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     private Ships leftShips;
     private Ships rightShips;
 
-    /** Handles mouse events. */
+    /**
+     * Handles mouse events.
+     */
     private MouseAdapter mouseAdapter;
 
     private Action rotateShipAction;
 
-    public GamePanel(edu.gonzaga.Board leftBoardModel, edu.gonzaga.Board rightBoardModel) {
+    public GamePanel(GamePanelCallbacks callbacks,
+                     edu.gonzaga.Board leftBoardModel,
+                     edu.gonzaga.Board rightBoardModel) {
         super();
+
+        this.callbacks = callbacks;
 
         this.leftBoardModel = leftBoardModel;
         this.rightBoardModel = rightBoardModel;
@@ -99,16 +105,14 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         this.gameState = gameState;
     }
 
-    public void placeShip(Ship.ShipType type, PlaceShipCallback callback) {
+    public void placeShip(Ship.ShipType type) {
         placingShip = true;
         currentShipType = type;
         currentShipVertical = true;
-        placeShipCallback = callback;
     }
 
-    public void takeAction( TakeActionCallback callback) {
+    public void takeAction() {
         takingAction = true;
-        takeActionCallback = callback;
     }
 
     private void onMouseClicked(MouseEvent e) {
@@ -120,12 +124,12 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
                 return;
             }
 
-            if (getCurrentBoardModel().validateShipPlacement( ship )) {
+            if (getCurrentBoardModel().validateShipPlacement(ship)) {
                 getCurrentBoardModel().addShip(ship);
 
                 getCurrentBoard().ghostShip = null;
                 placingShip = false;
-                placeShipCallback.onShipPlaced();
+                callbacks.onShipPlaced();
             }
         }
 
@@ -143,25 +147,24 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
             getOppositeBoard().ghostMarker = null;
             getOppositeBoardModel().setMarked(coord);
-            info.displayPlayerHit( getOppositeBoardModel().isMarkerHit(coord) );
+            info.displayPlayerHit(getOppositeBoardModel().isMarkerHit(coord));
 
             /*
              * Here we would need to indicate to the display field that there was a hit, maybe?
              */
 
             takingAction = false;
-            takeActionCallback.onActionTaken();
+            callbacks.onActionTaken();
         }
     }
 
     private void onMouseMoved(MouseEvent e) {
         updateGhostShip();
         updateGhostMarker();
-//        repaint();
     }
 
     private Board getCurrentBoard() {
-        if ( (gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN) ) {
+        if ((gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN)) {
             return leftBoard;
         } else {
             return rightBoard;
@@ -169,7 +172,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     }
 
     private Board getOppositeBoard() {
-        if ( (gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN) ) {
+        if ((gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN)) {
             return rightBoard;
         } else {
             return leftBoard;
@@ -177,7 +180,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     }
 
     private edu.gonzaga.Board getCurrentBoardModel() {
-        if ( (gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN) ) {
+        if ((gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN)) {
             return leftBoardModel;
         } else {
             return rightBoardModel;
@@ -185,7 +188,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
     }
 
     private edu.gonzaga.Board getOppositeBoardModel() {
-        if ( (gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN) ) {
+        if ((gameState == Game.GameState.PLAYER_1_SETUP) || (gameState == Game.GameState.PLAYER_1_TURN)) {
             return rightBoardModel;
         } else {
             return leftBoardModel;
