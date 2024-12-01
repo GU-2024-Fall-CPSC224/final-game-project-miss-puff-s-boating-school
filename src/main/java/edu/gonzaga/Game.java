@@ -3,115 +3,135 @@ package edu.gonzaga;
 import edu.gonzaga.renderer.*;
 import edu.gonzaga.ships.Ship;
 
-public class Game implements Runnable, GamePanelCallbacks, EndPanelCallbacks {
-    
-    // --------------------------------------
-    //         Attributes are here:
-    // --------------------------------------
+/**
+ * The main class that runs the game, handling state and transitions between panels.
+ */
+public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, EndPanelCallbacks {
+    /**
+     * The current state of the game.
+     */
+    GameState currentGameState;
 
+    /**
+     * The number of ships that have been placed in the current setup phase.
+     */
     Integer shipsPlaced = 0;
 
     /**
-     * Tracks the current state of the game, which can be:
-     * 1. SETUP: Placing ships
-     * 2. PLAYER_1_TURN: Player 1's turn
-     * 3. PLAYER_2_TURN: Player 2's turn
-     * 4. GAMEOVER: The game has finished
+     * Defines the possible states of the game.
      */
-    Game.GameState currentGameState;
-
     public enum GameState {
+        /**
+         * Player 1 is taking their turn.
+         */
         PLAYER_1_TURN,
+        /**
+         * Player 1 is setting up their ships.
+         */
         PLAYER_1_SETUP,
+        /**
+         * Player 2 is taking their turn.
+         */
         PLAYER_2_TURN,
+        /**
+         * Player 2 is setting up their ships.
+         */
         PLAYER_2_SETUP,
+        /**
+         * The game has ended.
+         */
         GAME_OVER
     }
 
+    Player player1;
+    Player player2;
 
-    Player player1 = new Player( "TEST PLAYER 1" );
-    Player player2 = new Player( "TEST PLAYER 2" );
-
-    Board leftBoard = new Board();
-    Board rightBoard = new Board();
+    Board leftBoard;
+    Board rightBoard;
 
     GameFrame frame = new GameFrame();
-    GamePanel gamePanel = new GamePanel( this, leftBoard, rightBoard, player1, player2 );
+    GamePanel gamePanel;
 
-
-    // --------------------------------------
-    //          Methods start here:
-    // --------------------------------------
-    
     @Override
     public void run() {
         System.out.println("Running game...");
 
-        // INTRO SCREEN:
+        System.out.println("Going to intro panel...");
+        frame.setActivePanel(new IntroPanel(this));
+    }
 
-        // Introduction / setup phase:
+    @Override
+    public void introPanelOnStartGame(String player1Name, String player2Name) {
+        System.out.println("Starting game with players: " + player1Name + " and " + player2Name);
+
+        player1 = new Player(player1Name);
+        player2 = new Player(player2Name);
+
+        leftBoard = new Board();
+        rightBoard = new Board();
+
+        gamePanel = new GamePanel(this, leftBoard, rightBoard, player1, player2);
+
         System.out.println("Going to game panel...");
+        setGameState(Game.GameState.PLAYER_1_SETUP);
         frame.setActivePanel(gamePanel);
-        // Setup player 1 ships:
-        changeGameState( Game.GameState.PLAYER_1_SETUP );
-        runSetupPhase( gamePanel );
 
-        // Turns phase
+        gamePanel.placeShip(Ship.ShipType.values()[shipsPlaced]);
+    }
 
-        
-
-        // Ending screen
+    @Override
+    public void introPanelOnSettings() {
+        System.out.println("Going to settings panel...");
     }
 
     @Override
     public void onShipPlaced() {
         shipsPlaced++;
 
-        // If finished, return from this method.
-        if ( shipsPlaced >= 5 ) {
-            shipsPlaced = 0;
-
-            System.out.println("All ships placed.");
-
-            // If both players have finished setting up, then move to the turns phase.
-            if ( (currentGameState == Game.GameState.PLAYER_2_SETUP) ) {
-                changeGameState( Game.GameState.PLAYER_1_TURN);
-                runTurnsPhase( gamePanel );
-            }
-            // If the first player has completed their setup, switch the game state to the second player's setup.
-            if ( currentGameState == Game.GameState.PLAYER_1_SETUP ) {
-                changeGameState( Game.GameState.PLAYER_2_SETUP );
-                runSetupPhase( gamePanel );
-                // Set the shipsPlaced Integer to zero here as well.
-            }
-
+        // If less than 5 ships have been placed, call the placeShip method again
+        if (shipsPlaced < 5) {
+            gamePanel.placeShip(Ship.ShipType.values()[shipsPlaced]);
             return;
         }
 
-        // If fewer than 5 ships have been placed, simply call the placeship method again with the next ship ENUM.
-        gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ]);
+        // Otherwise, this player has placed all their ships
+        shipsPlaced = 0;
+
+        System.out.println("All ships placed.");
+
+        // We either have to switch to the next player's setup phase, or to the turns phase
+        if ((currentGameState == GameState.PLAYER_2_SETUP)) {
+            setGameState(GameState.PLAYER_1_TURN);
+
+            gamePanel.takeAction();
+        }
+        if (currentGameState == GameState.PLAYER_1_SETUP) {
+            setGameState(GameState.PLAYER_2_SETUP);
+
+            gamePanel.placeShip(Ship.ShipType.values()[shipsPlaced]);
+        }
     }
 
-
-    /**
-     * onActionTaken() runs during the turns phase where players are checking spaces. Each time a space is
-     * checked, this functino will check who's turn it currently is, and set the turn phase to the other player,
-     * before running another call to runTurnsPhase.
-     */
     @Override
     public void onActionTaken() {
-
-        // Check if the game is over.
-        checkGameIsOver();
-
-        // Check who's turn it is, and swap the game state to the other player, switching the turn.
-        if ( currentGameState == Game.GameState.PLAYER_1_TURN ) {
-            changeGameState( Game.GameState.PLAYER_2_TURN);
-            runTurnsPhase( gamePanel );
+        switch (isGameOver()) {
+            case 1:
+                System.out.println("Player 1 has no ships left. Moving to end screen.");
+                frame.setActivePanel(new EndPanel(this, player2));
+                return;
+            case 2:
+                System.out.println("Player 2 has no ships left. Moving to end screen.");
+                frame.setActivePanel(new EndPanel(this, player1));
+                return;
         }
-        else {
-            changeGameState( Game.GameState.PLAYER_1_TURN);
-            runTurnsPhase( gamePanel );
+
+        // Check whose turn it is, and swap the game state to the other player, switching the turn
+        if (currentGameState == Game.GameState.PLAYER_1_TURN) {
+            setGameState(Game.GameState.PLAYER_2_TURN);
+            gamePanel.takeAction();
+        } else {
+            setGameState(Game.GameState.PLAYER_1_TURN);
+            gamePanel.takeAction();
         }
     }
 
@@ -125,63 +145,29 @@ public class Game implements Runnable, GamePanelCallbacks, EndPanelCallbacks {
         System.out.println("Returning to main menu...");
     }
 
-    /** 
-     * runSetupPhase() requires both players to place all five of their ships on their board.
-     */
-    public void runSetupPhase(GamePanel gamePanel ) {
-
-
-
-        /*
-         * I imagine we will need to add some sort of text display between the boards that tells the players when it's their turn,
-         * how to rotate ship and place them, and other information. I notice that currently the text for the game uses a paint
-         * component to do this? How do I access this?
-         */
-
-        // Place SHIPS!
-        gamePanel.placeShip( Ship.ShipType.values()[ shipsPlaced ]);
-    }
-
-
     /**
-     * runTurnsPhase() flips between player turn states while the user's attempt to mark
-     * their opponent's ships.
+     * Sets the current game state and updates the game panel.
+     * @param newState The new game state.
      */
-    public void runTurnsPhase(GamePanel gamePanel ) {
-        // Check a space on the the enemy board!
-        gamePanel.takeAction();
-    }
-    
-    
-    /**
-     * changeGameState() changes the state of the game.
-     */
-    public void changeGameState( Game.GameState newState ) {
+    private void setGameState(Game.GameState newState) {
         System.out.println("Game state changed to: " + newState);
         currentGameState = newState;
-        gamePanel.setGameState( newState );
+        gamePanel.setGameState(newState);
     }
 
-
     /**
-     * checkGameIsOver() determines if all the ships on either board have been sunk. If true,
-     * then the game switches to the ending screen, with the winning player displayed.
+     * Checks if the game is over.
+     * @return 1 if player 1 has no ships, 2 if player 2 has no ships, 0 otherwise.
      */
-    private void checkGameIsOver() {
-
-        // Check if player 1 has no ships:
+    private int isGameOver() {
         if (leftBoard.checkAllShipsSunk()) {
-            System.out.println("Player 1 has no ships left. Moving to end screen.");
-            currentGameState = GameState.GAME_OVER;
-
-            frame.setActivePanel(new EndPanel(this, player2));
+            return 1;
         }
         // Check if player 2 has no ships:
         if (rightBoard.checkAllShipsSunk()) {
-            System.out.println("Player 2 has no ships left. Moving to end screen.");
-            currentGameState = GameState.GAME_OVER;
-
-            frame.setActivePanel(new EndPanel(this, player1));
+            return 2;
         }
+
+        return 0;
     }
 }
