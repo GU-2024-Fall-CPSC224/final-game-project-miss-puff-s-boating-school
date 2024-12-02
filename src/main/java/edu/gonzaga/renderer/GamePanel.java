@@ -94,7 +94,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
             }
         };
 
-        getInputMap().put(KeyStroke.getKeyStroke("R"), "rotateShip");
+        getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("R"), "rotateShip");
         getActionMap().put("rotateShip", rotateShipAction);
 
         addMouseListener(mouseAdapter);
