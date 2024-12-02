@@ -33,6 +33,10 @@ public class ImageBuffers
         return imageBuffers.get(key);
     }
 
+    public Image getShipSideImage(Ship.ShipType type) {
+        return imageBuffers.get(type.name().toLowerCase() + "-side");
+    }
+
     private ImageBuffers() {
         imageBuffers = new HashMap<>();
 
@@ -55,6 +59,9 @@ public class ImageBuffers
             imageBuffers.put(name, tint(base, Color.WHITE));
             imageBuffers.put(name + "-red", tint(base, Color.RED));
             imageBuffers.put(name + "-green", tint(base, Color.GREEN));
+
+            BufferedImage side = ImageIO.read(new File("res/ships/" + name + "-side.png"));
+            imageBuffers.put(name + "-side", side);
         } catch (Exception e) {
             e.printStackTrace();
         }
