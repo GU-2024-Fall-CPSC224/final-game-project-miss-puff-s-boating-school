@@ -14,6 +14,10 @@ public class SettingsPanel extends JPanel {
     private JPanel shipVisibilitySetting;
     private JCheckBox visibilityToggle;
 
+    private JPanel roundCountSetting;
+    private JLabel roundCountLabel;
+    private JTextField roundCountTextField;
+
     /**
      * settingsPanel() is the constructor for the settings panel window.
      */
@@ -32,14 +36,19 @@ public class SettingsPanel extends JPanel {
             callbacks.previousPanelOnCLoseSettings();
         });
 
+        // Add ship visibility setting.
         addShipVisibilitySetting();
 
-//         Add Button 3:
+        // Add maximum round count setting.
+        addMaximumRoundCountSetting();
+
+        // Add Button 3:
         JCheckBox turnTimer = new JCheckBox();
         turnTimer.setText("Toggle turn timer");
         this.add(turnTimer);
 
     }
+
 
     /*
      * addShipVisibilitySetting() creates a new Jpanel, which stores the settings toggle for
@@ -50,8 +59,26 @@ public class SettingsPanel extends JPanel {
 
         visibilityToggle = new JCheckBox("Hide Ships", Settings.getInstance().hideShipsOnBoard);
         shipVisibilitySetting.add(visibilityToggle);
-
+        // Add the visibility setting panel to the main panel.
         add(shipVisibilitySetting);
+    }
+
+
+    /**
+     * addMaximumTurnCountSetting() creates a text field with a changable number, which
+     * determines how many rounds a game will last.
+     */
+    private void addMaximumRoundCountSetting() {
+        roundCountSetting = new JPanel();
+
+        roundCountLabel = new JLabel( "Max Round Count:" );
+        roundCountSetting.add( roundCountLabel );
+
+        roundCountTextField = new JTextField( Integer.toString( Settings.getInstance().turnLimit ) );
+        roundCountSetting.add( roundCountTextField );
+
+        // Add the maximum round cap to the settings panel.
+        add(roundCountSetting);
     }
 
     /*
@@ -60,10 +87,14 @@ public class SettingsPanel extends JPanel {
     public void updateSettings() {
         // Get an instance of the settings.
         Settings currentSettings = Settings.getInstance();
-
+        
+        // Check if the ship visibility toggle has changed:
         currentSettings.hideShipsOnBoard = this.visibilityToggle.isSelected();
         System.out.println("Ship visibility: " + currentSettings.hideShipsOnBoard);
 
+        // Check if the round count has been changed:
+        currentSettings.turnLimit = Integer.valueOf( this.roundCountTextField.getText().trim() );
+        System.out.println("Maximum turn count: " + roundCountTextField );
 
     }
 
