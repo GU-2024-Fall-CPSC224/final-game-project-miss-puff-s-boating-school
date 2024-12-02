@@ -15,6 +15,7 @@ public class Board extends JPanel {
     private int gridCellSize;
     private int boardSize;
 
+    public boolean hideShips = false;
     public Ship ghostShip;
     public Coordinate ghostMarker;
 
@@ -34,7 +35,9 @@ public class Board extends JPanel {
         boardSize = gridCellSize * TOTAL_CELLS;
 
         for (Ship ship : model.getShips()) {
-            drawShip((Graphics2D) g, Color.WHITE, ship);
+            if (!hideShips || ship.getIsSunk()) {
+                drawShip((Graphics2D) g, Color.WHITE, ship);
+            }
         }
 
         if (ghostShip != null) {

@@ -1,6 +1,7 @@
 package edu.gonzaga.renderer;
 
 import edu.gonzaga.Game;
+import edu.gonzaga.Settings;
 import edu.gonzaga.ships.*;
 import edu.gonzaga.Coordinate;
 
@@ -107,6 +108,11 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         this.gameState = gameState;
         // While setting up, Change display based on player setup.:
         info.displayPlayerSetup( gameState );
+
+        if (Settings.getInstance().hideShipsOnBoard) {
+            getCurrentBoard().hideShips = false;
+            getOppositeBoard().hideShips = true;
+        }
     }
 
     public void placeShip(Ship.ShipType type) {
