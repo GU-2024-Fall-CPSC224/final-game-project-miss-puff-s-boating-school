@@ -82,7 +82,31 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
     @Override
     public void introPanelOnSettings() {
         System.out.println("Going to settings panel...");
-        frame.setActivePanel( new SettingsPanel( this ) );
+        frame.setActivePanel(new SettingsPanel(this));
+    }
+
+    @Override
+    public void onHandoffStarted() {
+        gamePanel.onHandoffStarted();
+    }
+
+    @Override
+    public void onPlayerSwitched() {
+        switch (currentGameState) {
+            case PLAYER_1_SETUP -> {
+                setGameState(GameState.PLAYER_2_SETUP);
+                gamePanel.placeShip(Ship.ShipType.values()[shipsPlaced]);
+            }
+            case PLAYER_2_SETUP, PLAYER_2_TURN -> {
+                setGameState(GameState.PLAYER_1_TURN);
+                gamePanel.takeAction();
+            }
+            case PLAYER_1_TURN -> {
+                setGameState(GameState.PLAYER_2_TURN);
+                gamePanel.takeAction();
+            }
+            default -> {}
+        }
     }
 
     @Override
@@ -102,37 +126,42 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
 
         // We either have to switch to the next player's setup phase, or to the turns phase
         if ((currentGameState == GameState.PLAYER_2_SETUP)) {
-            setGameState(GameState.PLAYER_1_TURN);
+            gamePanel.turnComplete();
 
-            gamePanel.takeAction();
+//            setGameState(GameState.PLAYER_1_TURN);
+//
+//            gamePanel.takeAction();
         }
         if (currentGameState == GameState.PLAYER_1_SETUP) {
-            setGameState(GameState.PLAYER_2_SETUP);
-
-            gamePanel.placeShip(Ship.ShipType.values()[shipsPlaced]);
+            gamePanel.turnComplete();
+//            setGameState(GameState.PLAYER_2_SETUP);
+//
+//            gamePanel.placeShip(Ship.ShipType.values()[shipsPlaced]);
         }
     }
 
     @Override
     public void onActionTaken() {
-        switch (isGameOver()) {
-            case 1:
-                System.out.println("Player 1 has no ships left. Moving to end screen.");
-                frame.setActivePanel(new EndPanel(this, player2));
-                return;
-            case 2:
-                System.out.println("Player 2 has no ships left. Moving to end screen.");
-                frame.setActivePanel(new EndPanel(this, player1));
-                return;
+        if (leftBoard.checkAllShipsSunk()) {
+            System.out.println("Player 1 has no ships left. Moving to end screen.");
+            frame.setActivePanel(new EndPanel(this, player2));
+            return;
+        } else if (rightBoard.checkAllShipsSunk()) {
+            System.out.println("Player 2 has no ships left. Moving to end screen.");
+            frame.setActivePanel(new EndPanel(this, player1));
+            return;
         }
+
+        gamePanel.turnComplete();
 
         // Check whose turn it is, and swap the game state to the other player, switching the turn
         if (currentGameState == Game.GameState.PLAYER_1_TURN) {
-            setGameState(Game.GameState.PLAYER_2_TURN);
-            gamePanel.takeAction();
+
+//            setGameState(Game.GameState.PLAYER_2_TURN);
+//            gamePanel.takeAction();
         } else {
-            setGameState(Game.GameState.PLAYER_1_TURN);
-            gamePanel.takeAction();
+//            setGameState(Game.GameState.PLAYER_1_TURN);
+//            gamePanel.takeAction();
         }
     }
 
@@ -148,6 +177,7 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
 
     /**
      * Sets the current game state and updates the game panel.
+     *
      * @param newState The new game state.
      */
     private void setGameState(Game.GameState newState) {
@@ -156,26 +186,10 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
         gamePanel.setGameState(newState);
     }
 
-    /**
-     * Checks if the game is over.
-     * @return 1 if player 1 has no ships, 2 if player 2 has no ships, 0 otherwise.
-     */
-    private int isGameOver() {
-        if (leftBoard.checkAllShipsSunk()) {
-            return 1;
-        }
-        // Check if player 2 has no ships:
-        if (rightBoard.checkAllShipsSunk()) {
-            return 2;
-        }
-
-        return 0;
-    }
-
     @Override
     public void previousPanelOnCLoseSettings() {
         System.out.println("Returning to intro panel...");
-        
+
         frame.setActivePanel(new IntroPanel(this));
     }
 }

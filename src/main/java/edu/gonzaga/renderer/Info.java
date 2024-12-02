@@ -4,175 +4,152 @@ import javax.swing.*;
 
 import edu.gonzaga.Game;
 import edu.gonzaga.Player;
-import edu.gonzaga.Game.GameState;
 
 import java.awt.*;
 
 public class Info extends JPanel {
-    
     /*
      * Holds the player names
      */
     Player player1;
     Player player2;
 
-    JLabel gameTitle = new JLabel();
-    JLabel statusDisplay = new JLabel();
-    JButton settingsButton = new JButton();
-    
+    JLabel gameTitle;
+
+    JPanel centerContainer;
+    JButton switchButton;
+    JLabel statusDisplayTop;
+    JLabel statusDisplayBottom;
+
+    private GamePanelCallbacks callbacks;
+    /**
+     * Is the screen being handed off to the other player?
+     */
+    private boolean isInSwitch = false;
+
     /**
      * Constructor for painting?
      */
-    public Info( Player player1, Player player2 ) {
-        super();
+    public Info(GamePanelCallbacks callbacks, Player player1, Player player2) {
+        super(new BorderLayout());
 
+        setBackground(Color.BLACK);
+
+        this.callbacks = callbacks;
         this.player1 = player1;
         this.player2 = player2;
 
-        // add(westPanel, BorderLayout.WEST); < Reference code.
-
-        // Setting the info Panel to have a box layout ( tile, textscreen, settings button, etc.)
-        this.setLayout( new BorderLayout() );
-        this.setAlignmentX( 0.5f );
-
-        setBackground(Color.BLACK);
         addGameTitle();
-        addStatusDisplayScreen();
-        addSettingsButton();
-        
+        addCenter();
     }
 
-    /*
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        g.setColor(Color.WHITE);
-        Font font = new Font("Arial", Font.PLAIN, 42);
-        g.setFont(font);
-        FontMetrics metrics = g.getFontMetrics(font);
-
-        int x = (getWidth() - metrics.stringWidth("Battleship")) / 2;
-
-        g.drawString("Battleship", x, 40);
-
-        font = new Font("Arial", Font.PLAIN, 32);
-        g.setFont(font);
-        metrics = g.getFontMetrics(font);
-
-        x = (getWidth() - metrics.stringWidth("_____'s Turn")) / 2;
-
-        g.drawString("_____'s Turn", x, 100);
+    public void setGameState(Game.GameState state) {
+        switch (state) {
+            case PLAYER_1_SETUP -> setStatusText(player1.getName(), "Set up your ships.");
+            case PLAYER_2_SETUP -> setStatusText(player2.getName(), "Set up your ships.");
+            case PLAYER_1_TURN -> setStatusText(player1.getName(), "It's your turn.");
+            case PLAYER_2_TURN -> setStatusText(player2.getName(), "It's your turn.");
+            default -> {
+            }
+        }
     }
-    */
 
+    public void turnComplete() {
+        switchButton.setEnabled(true);
+        switchButton.setText("End turn");
+        setStatusText("Turn complete", "");
+    }
+
+    private void onSwitchButtonPressed() {
+        if (isInSwitch) {
+            switchButton.setEnabled(false);
+            switchButton.setText("Waiting...");
+            callbacks.onPlayerSwitched();
+        } else {
+            switchButton.setText("Press to start turn");
+            setStatusText("Hand off to", "other player");
+            callbacks.onHandoffStarted();
+        }
+
+        isInSwitch = !isInSwitch;
+    }
 
     /**
      * addGameTitle() Adds the BATTLESHIP (C) title to the top of the main game panel.
      */
-    public void addGameTitle() {
-        // Set object alignment inside the panel to the center of the panel.
-        this.gameTitle.setAlignmentX( 0.5f );
-        Font font = new Font("Arial", Font.PLAIN, 42); // Set font size and style
-        this.gameTitle.setForeground( Color.WHITE ); // Set font color.
-        this.gameTitle.setFont( font ); // add the customized font to the label.
-        this.gameTitle.setText( "BATTLESHIP" ); // Set label text.
-        this.add( gameTitle, BorderLayout.NORTH );
-        
+    private void addGameTitle() {
+        gameTitle = new JLabel();
+
+        gameTitle.setText("BATTLESHIP");
+        Font font = new Font("Arial", Font.PLAIN, 42);
+        gameTitle.setFont(font);
+        gameTitle.setForeground(Color.WHITE);
+
+        gameTitle.setHorizontalAlignment(SwingConstants.CENTER);
+
+        add(gameTitle, BorderLayout.NORTH);
     }
 
+    private void addCenter() {
+        centerContainer = new JPanel();
+        centerContainer.setOpaque(false);
+        centerContainer.setLayout(new BoxLayout(centerContainer, BoxLayout.Y_AXIS));
+
+        addSwitchButton();
+        addStatusDisplay();
+
+        add(centerContainer, BorderLayout.CENTER);
+    }
+
+    private void addSwitchButton() {
+        switchButton = new JButton("Button");
+        switchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        switchButton.setEnabled(false);
+        switchButton.setText("Waiting...");
+        switchButton.addActionListener(e -> onSwitchButtonPressed());
+
+        Font font = new Font("Arial", Font.PLAIN, 32);
+        switchButton.setFont(font);
+        switchButton.setBackground(new Color(0, 0, 0, 0));
+        switchButton.setForeground(Color.WHITE);
+        switchButton.setFocusPainted(false);
+        switchButton.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.WHITE, 2),
+                        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+                )
+        );
+
+        centerContainer.add(Box.createRigidArea(new Dimension(0, 60)));
+        centerContainer.add(switchButton);
+    }
 
     /**
      * addStatusDisplayScreen() adds the "display screen", which will tell both players when to setup,
      * who's turn it is, etc.
      */
-    public void addStatusDisplayScreen() {
-        // Set object alignment inside the panel to the center of the panel.
-        this.statusDisplay.setAlignmentX( 0.5f );
-        Font font = new Font("Arial", Font.PLAIN, 32); // Set font size and style
-        this.statusDisplay.setForeground( Color.WHITE ); // Set font color.
-        this.statusDisplay.setFont( font ); // add the customized font to the label.
-        this.statusDisplay.setText( "This is the text display field." ); // Set label text.
-        this.add( statusDisplay, BorderLayout.CENTER );
+    private void addStatusDisplay() {
+        statusDisplayTop = new JLabel();
+        statusDisplayBottom = new JLabel();
+
+        Font font = new Font("Arial", Font.PLAIN, 32);
+
+        statusDisplayTop.setFont(font);
+        statusDisplayTop.setForeground(Color.WHITE);
+        statusDisplayTop.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        centerContainer.add(Box.createRigidArea(new Dimension(0, 60)));
+        centerContainer.add(statusDisplayTop);
+
+        statusDisplayBottom.setFont(font);
+        statusDisplayBottom.setForeground(Color.WHITE);
+        statusDisplayBottom.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        centerContainer.add(statusDisplayBottom);
     }
 
-
-    /**
-     * addSettingsButton() adds a settings button which can be accessed to change various settings.
-     */
-    public void addSettingsButton() {
-        // Set object alignment inside the panel to the center of the panel.
-        this.settingsButton.setAlignmentX( 0.5f );
-        // Set object alignment to place the settings button at the bottom of the screen.
-        this.settingsButton.setAlignmentY(BOTTOM_ALIGNMENT);
-
-        Font font = new Font("Arial", Font.PLAIN, 32); // Set font size and style
-        this.settingsButton.setForeground( Color.BLACK ); // Set font color.
-        this.settingsButton.setFont( font ); // add the customized font to the label.
-        this.settingsButton.setText( "Settings" ); // Set label text.
-        this.add( settingsButton, BorderLayout.SOUTH );
-    }
-
-
-    /**
-     * displayPlayerHit() updates the statusDisplayScreen to whether the current player's most
-     * recent space check was a hit or a miss.
-     */
-    public void displayPlayerHit( Boolean isHit ) {
-        // If the space check was a hit, display:
-        if ( isHit == true ) {
-            statusDisplay.setText( "< HIT >" );
-            return;
-        }
-        // Otherwise, display:
-        statusDisplay.setText( "< MISS >");
-    }
-
-
-    /**
-     * displayPlayerHit() updates the statusDisplayScreen to whether the current player's most
-     * recent space check was a hit or a miss.
-     */
-    public void displayPlayerTurn( Game.GameState gameState, Boolean isHit ) {
-        
-        String checkText = "";
-        
-        // Display hit/miss status:
-        if ( isHit == true ) {
-            statusDisplay.setText( "HIT." );
-        }
-        else {
-            statusDisplay.setText( "MISS." );
-        }
-        checkText = statusDisplay.getText(); 
-        // Determine player turn display:
-        if ( gameState == Game.GameState.PLAYER_2_TURN ) {
-            statusDisplay.setText( "<html><head><style>p{text-align: center;}<p>" + checkText + "<br/><br/> IT IS NOW <br/>" 
-                                    + player1.getName() + "'S<br/> TURN.</p></html>" );
-            return;
-        }
-        // Otherwise, display:
-        if ( gameState == Game.GameState.PLAYER_1_TURN ) {
-            statusDisplay.setText( "<html><head><style>p{text-align: center;}<p>" + checkText + "<br/><br/> IT IS NOW <br/>" 
-                                    + player2.getName() + "'S<br/> TURN.</p></html>" );
-            return;
-        }
-    }
-
-
-    /**
-     * displayPlayerSetup() updats the text display screen with who's turn it is to setup ships.
-     */
-    public void displayPlayerSetup( Game.GameState gameState ) {
-        // Check for player 2's setup.
-        if ( gameState == Game.GameState.PLAYER_2_SETUP ) {
-            // Otherwise, display:
-            statusDisplay.setText( "<html><head><style>p{text-align: center;}<p>IT IS NOW<br/>" + player2.getName() +
-                                    "'S<br/> TURN. SET UP BATTLESHIPS.</p></html>" );
-        }
-        if ( gameState == Game.GameState.PLAYER_1_SETUP ) {
-            statusDisplay.setText( "<html><head><style>p{text-align: center;}<p>IT IS NOW<br/>" + player1.getName() +
-                                    "'S<br/> TURN. SET UP BATTLESHIPS.</p></html>" );
-        }
+    private void setStatusText(String top, String bottom) {
+        statusDisplayTop.setText(top);
+        statusDisplayBottom.setText(bottom);
     }
 }

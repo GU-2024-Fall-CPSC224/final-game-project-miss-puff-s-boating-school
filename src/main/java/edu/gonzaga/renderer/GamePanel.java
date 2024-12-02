@@ -57,7 +57,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
         rightBoard = new Board(rightBoardModel);
         add("rightBoard", rightBoard);
 
-        info = new Info( player1, player2 );
+        info = new Info(callbacks, player1, player2);
         add("info", info);
 
         leftShips = new Ships(leftBoardModel);
@@ -106,13 +106,25 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
     public void setGameState(Game.GameState gameState) {
         this.gameState = gameState;
-        // While setting up, Change display based on player setup.:
-        info.displayPlayerSetup( gameState );
+        info.setGameState(gameState);
 
         if (Settings.getInstance().hideShipsOnBoard) {
             getCurrentBoard().hideShips = false;
             getOppositeBoard().hideShips = true;
+            repaint();
         }
+    }
+
+    public void onHandoffStarted() {
+        if (Settings.getInstance().hideShipsOnBoard) {
+            getCurrentBoard().hideShips = true;
+            getOppositeBoard().hideShips = true;
+            repaint();
+        }
+    }
+
+    public void turnComplete() {
+        info.turnComplete();
     }
 
     public void placeShip(Ship.ShipType type) {
@@ -123,6 +135,11 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
     public void takeAction() {
         takingAction = true;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        repaint();
     }
 
     private void onMouseClicked(MouseEvent e) {
@@ -139,7 +156,6 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
                 getCurrentBoard().ghostShip = null;
                 placingShip = false;
-                // Display who's turn it is to setup ships:
 
                 callbacks.onShipPlaced();
             }
@@ -161,8 +177,6 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
             getOppositeBoardModel().setMarked(coord);
 
             takingAction = false;
-            // Display checked space result, and that it is now the other player's turn.
-            info.displayPlayerTurn( gameState, getOppositeBoardModel().isMarkerHit(coord) );
             callbacks.onActionTaken();
         }
     }
@@ -249,10 +263,5 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
                 return null;
             }
         }
-    }
-
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        repaint();
     }
 }
