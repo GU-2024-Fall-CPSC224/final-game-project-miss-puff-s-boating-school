@@ -19,10 +19,12 @@ public class ShipCard extends JPanel {
         this.ship = ship;
 
         if (ship.getIsSunk()) {
-            setBackground(Color.RED);
+            setBackground(Palette.SHIP_SUNK);
         } else {
-            setBackground(new Color(11, 48, 18));
+            setBackground(Palette.SHIP_OK);
         }
+
+        setBorder(BorderFactory.createLineBorder(Palette.WHITE, 1));
 
         setMinimumSize(new java.awt.Dimension(0, HEIGHT));
     }

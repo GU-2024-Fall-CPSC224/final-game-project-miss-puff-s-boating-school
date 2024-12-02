@@ -57,8 +57,8 @@ public class ImageBuffers
             BufferedImage base = ImageIO.read(new File("res/ships/" + name + ".png"));
 
             imageBuffers.put(name, tint(base, Color.WHITE));
-            imageBuffers.put(name + "-red", tint(base, Color.RED));
-            imageBuffers.put(name + "-green", tint(base, Color.GREEN));
+            imageBuffers.put(name + "-red", tint(base, Palette.SHIP_PLACE_BAD));
+            imageBuffers.put(name + "-green", tint(base, Palette.SHIP_PLACE_OK));
 
             BufferedImage side = ImageIO.read(new File("res/ships/" + name + "-side.png"));
             imageBuffers.put(name + "-side", side);

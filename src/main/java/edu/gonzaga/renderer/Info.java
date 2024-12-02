@@ -81,9 +81,8 @@ public class Info extends JPanel {
         gameTitle = new JLabel();
 
         gameTitle.setText("BATTLESHIP");
-        Font font = new Font("Arial", Font.PLAIN, 42);
-        gameTitle.setFont(font);
-        gameTitle.setForeground(Color.WHITE);
+        gameTitle.setFont(Palette.getTitleFont(48));
+        gameTitle.setForeground(Palette.WHITE);
 
         gameTitle.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -108,14 +107,13 @@ public class Info extends JPanel {
         switchButton.setText("Waiting...");
         switchButton.addActionListener(e -> onSwitchButtonPressed());
 
-        Font font = new Font("Arial", Font.PLAIN, 32);
-        switchButton.setFont(font);
-        switchButton.setBackground(new Color(0, 0, 0, 0));
-        switchButton.setForeground(Color.WHITE);
+        switchButton.setFont(Palette.getPrimaryFont(36));
+        switchButton.setBackground(Palette.CLEAR);
+        switchButton.setForeground(Palette.WHITE);
         switchButton.setFocusPainted(false);
         switchButton.setBorder(
                 BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(Color.WHITE, 2),
+                        BorderFactory.createLineBorder(Palette.WHITE, 2),
                         BorderFactory.createEmptyBorder(10, 20, 10, 20)
                 )
         );
@@ -132,16 +130,14 @@ public class Info extends JPanel {
         statusDisplayTop = new JLabel();
         statusDisplayBottom = new JLabel();
 
-        Font font = new Font("Arial", Font.PLAIN, 32);
-
-        statusDisplayTop.setFont(font);
+        statusDisplayTop.setFont(Palette.getPrimaryFont(36));
         statusDisplayTop.setForeground(Color.WHITE);
         statusDisplayTop.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         centerContainer.add(Box.createRigidArea(new Dimension(0, 60)));
         centerContainer.add(statusDisplayTop);
 
-        statusDisplayBottom.setFont(font);
+        statusDisplayBottom.setFont(Palette.getPrimaryFont(36));
         statusDisplayBottom.setForeground(Color.WHITE);
         statusDisplayBottom.setAlignmentX(Component.CENTER_ALIGNMENT);
 
