@@ -11,38 +11,34 @@ import java.awt.*;
  * including ship visibility, turn timers, special abilities, and volume.
  */
 public class SettingsPanel extends JPanel {
-    
     private JPanel shipVisibilitySetting;
-    private JTextField visibilityLabel;
     private JCheckBox visibilityToggle;
-    
+
     /**
      * settingsPanel() is the constructor for the settings panel window.
      */
-    public SettingsPanel( SettingsPanelCallbacks callbacks ) {
-            
+    public SettingsPanel(SettingsPanelCallbacks callbacks) {
         super();
-        setLayout( new BoxLayout( this, BoxLayout.Y_AXIS) );
-            
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         // Add Exit settings button:
         JButton exitButton = new JButton();
-        exitButton.setText( "Exit Settings" );
-        this.add( exitButton );
+        exitButton.setText("Exit Settings");
+        this.add(exitButton);
+
         // Add action listener to the exit button.
-            exitButton.addActionListener( e -> {
-                updateSettings();
-                callbacks.previousPanelOnCLoseSettings();
-            });
-        
-        // Add Ship Visibility setting to panel:
-        shipVisibilitySetting = new JPanel();
+        exitButton.addActionListener(e -> {
+            updateSettings();
+            callbacks.previousPanelOnCLoseSettings();
+        });
+
         addShipVisibilitySetting();
 
-        // Add Button 3:
+//         Add Button 3:
         JCheckBox turnTimer = new JCheckBox();
-        turnTimer.setText( "Toggle turn timer" );
-        this.add( turnTimer );
-        
+        turnTimer.setText("Toggle turn timer");
+        this.add(turnTimer);
+
     }
 
     /*
@@ -50,15 +46,12 @@ public class SettingsPanel extends JPanel {
      * ship visibility to all players.
      */
     private void addShipVisibilitySetting() {
-        // Add Ship visibility lable:
-        visibilityLabel = new JTextField( "Ships visible to both players" );
-        shipVisibilitySetting.add( visibilityLabel );
-        // Add ship visibility checkbox:
-        visibilityToggle = new JCheckBox();
-        // Determine if hideShips is toggled on or off.
-        visibilityToggle.setSelected( Settings.getInstance().hideShipsOnBoard );
-        //visibilityToggle.setText( "Toggle hidden ships" );
-        shipVisibilitySetting.add( visibilityToggle );
+        shipVisibilitySetting = new JPanel();
+
+        visibilityToggle = new JCheckBox("Hide Ships", Settings.getInstance().hideShipsOnBoard);
+        shipVisibilitySetting.add(visibilityToggle);
+
+        add(shipVisibilitySetting);
     }
 
     /*
@@ -68,11 +61,9 @@ public class SettingsPanel extends JPanel {
         // Get an instance of the settings.
         Settings currentSettings = Settings.getInstance();
 
-        //Check for updated ship visibility:
         currentSettings.hideShipsOnBoard = this.visibilityToggle.isSelected();
-        System.out.println( "Ship visibility: " + currentSettings.hideShipsOnBoard );
-        
-       
+        System.out.println("Ship visibility: " + currentSettings.hideShipsOnBoard);
+
 
     }
 
