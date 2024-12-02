@@ -24,6 +24,11 @@ public class Board {
     // markers stores all markers placed on the player's board.
     private boolean[][] markers;
 
+    /**
+     * totalHits stores the tallied count of how many hits this player's ships have taken.
+     */
+    private Integer totalHits = 0;
+
     // -----------------------------------
     // METHODS START HERE
     // -----------------------------------
@@ -70,6 +75,8 @@ public class Board {
         if (attackedShip == null) {
             System.out.println("Marker at " + playerCoord + " was a miss.");
         } else {
+            // add the hit to the total hits tally ( used for round limit-based wins. )
+            totalHits += 1;
             // If every segment of the ship has been marked, the ship was sunk
             if (attackedShip.getAllCoordinates().stream().allMatch(this::isMarked)) {
                 attackedShip.sinkShip();
@@ -197,5 +204,13 @@ public class Board {
         }
         // All ships have been sunk.
         return true;
+    }
+
+
+    /**
+     * getTotalHits() returns the tallied hit markers.
+     */
+    public Integer getTotalHits() {
+        return totalHits;
     }
 }

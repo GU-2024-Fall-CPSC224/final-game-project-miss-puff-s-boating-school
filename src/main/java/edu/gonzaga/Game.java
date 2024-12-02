@@ -18,6 +18,11 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
     Integer shipsPlaced = 0;
 
     /**
+     * Holds the number of rounds taken.
+     */
+    Integer roundsPlayed = 0;
+
+    /**
      * Defines the possible states of the game.
      */
     public enum GameState {
@@ -87,6 +92,9 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
 
     @Override
     public void onHandoffStarted() {
+        if ( (currentGameState == Game.GameState.PLAYER_1_TURN) || (currentGameState == Game.GameState.PLAYER_2_TURN) ) {
+            roundsPlayed += 1;
+        }
         gamePanel.onHandoffStarted();
     }
 
@@ -150,6 +158,26 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
             System.out.println("Player 2 has no ships left. Moving to end screen.");
             frame.setActivePanel(new EndPanel(this, player1));
             return;
+        }
+        // For maximum round count setting: Check if all turns used.
+        if ( roundsPlayed > Settings.getInstance().turnLimit ) {
+            System.out.println("Round Limit reached. Moving to end screen.");
+            // The winner is determined by whoever has the most hits on the other's ships.
+            // Check if player 1 wins:
+            if ( leftBoard.getTotalHits() < rightBoard.getTotalHits() ) {
+                frame.setActivePanel(new EndPanel(this, player1));
+                return;
+            }
+            // Check for a draw.
+            if ( leftBoard.getTotalHits() == rightBoard.getTotalHits() ) {
+                frame.setActivePanel(new EndPanel(this, null ));
+                return;
+            }
+            // Otherwise, player 2 wins:
+            else {
+                frame.setActivePanel(new EndPanel(this, player2));
+                return;
+            }
         }
 
         gamePanel.turnComplete();
