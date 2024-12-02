@@ -1,6 +1,7 @@
 package edu.gonzaga.renderer;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class IntroPanel extends JPanel {
     private JTextField player1Name;
@@ -10,29 +11,44 @@ public class IntroPanel extends JPanel {
         super();
 
         setLayout(new IntroLayout());
+        setOpaque(false);
 
         createTitle();
         createPlayers();
         createButtons(callbacks);
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.drawImage(ImageBuffers.getInstance().getImage("intro-splash"), 0, 0, getWidth(), getHeight(), null);
+
+        super.paintComponent(g);
+    }
+
     private void createTitle() {
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setOpaque(false);
 
-        JLabel title = new JLabel("Battleship");
+        JLabel title = new JLabel("BATTLESHIP");
         title.setAlignmentX(0.5f);
+        title.setFont(Palette.getTitleFont(72));
+        title.setForeground(Palette.WHITE);
         container.add(title);
 
         JLabel authors = new JLabel("Miss Puff's Boating School");
         authors.setAlignmentX(0.5f);
+        authors.setFont(Palette.getPrimaryFont(24));
+        authors.setForeground(Palette.WHITE);
         container.add(authors);
+
         add("title", container);
     }
 
     private void createPlayers() {
         JPanel player1Container = new JPanel();
         player1Container.setLayout(new BoxLayout(player1Container, BoxLayout.Y_AXIS));
+        player1Container.setOpaque(false);
 
         JLabel player1Label = new JLabel("Player 1");
         player1Label.setAlignmentX(0.5f);
@@ -44,6 +60,7 @@ public class IntroPanel extends JPanel {
 
         JPanel player2Container = new JPanel();
         player2Container.setLayout(new BoxLayout(player2Container, BoxLayout.Y_AXIS));
+        player2Container.setOpaque(false);
 
         JLabel player2Label = new JLabel("Player 2");
         player2Label.setAlignmentX(0.5f);
@@ -60,27 +77,49 @@ public class IntroPanel extends JPanel {
     private void createButtons(IntroPanelCallbacks callbacks) {
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setOpaque(false);
 
-        JButton startButton = new JButton("Start Game");
-        startButton.setAlignmentX(0.5f);
+        JButton startButton = createButton();
+        startButton.setText("Start Game");
         container.add(startButton);
+        container.add(Box.createRigidArea(new Dimension(0, 20)));
 
         startButton.addActionListener(e -> callbacks.introPanelOnStartGame(
                 player1Name.getText(),
                 player2Name.getText()));
 
-        JButton settingsButton = new JButton("Settings");
-        settingsButton.setAlignmentX(0.5f);
+        JButton settingsButton = createButton();
+        settingsButton.setText("Settings");
         container.add(settingsButton);
+        container.add(Box.createRigidArea(new Dimension(0, 20)));
 
         settingsButton.addActionListener(e -> callbacks.introPanelOnSettings());
 
-        JButton quitButton = new JButton("Quit");
-        quitButton.setAlignmentX(0.5f);
+        JButton quitButton = createButton();
+        quitButton.setText("Quit");
         container.add(quitButton);
 
         quitButton.addActionListener(e -> System.exit(0));
 
         add("buttons", container);
+    }
+
+    private JButton createButton() {
+        JButton button = new JButton();
+
+        button.setFont(Palette.getPrimaryFont(32));
+        button.setBackground(Palette.CLEAR);
+        button.setOpaque(false);
+        button.setForeground(Palette.WHITE);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        button.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Palette.WHITE, 2),
+                        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+                )
+        );
+
+        return button;
     }
 }

@@ -47,6 +47,8 @@ public class ImageBuffers
         try {
             imageBuffers.put("hit", ImageIO.read(new File("res/board/hit.png")));
             imageBuffers.put("miss", ImageIO.read(new File("res/board/miss.png")));
+            imageBuffers.put("intro-splash", ImageIO.read(new File("res/intro-splash.png")));
+            imageBuffers.put("ending-splash", ImageIO.read(new File("res/ending-splash.png")));
         } catch (Exception e) {
             e.printStackTrace();
         }

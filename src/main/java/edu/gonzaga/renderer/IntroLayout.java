@@ -46,8 +46,8 @@ public class IntroLayout implements LayoutManager {
         int height = parent.getHeight() - insets.top - insets.bottom;
 
         title.setBounds(0, 0, width, height / 6);
-        player1.setBounds(0, height / 6, width / 4, height * 4 / 6);
-        player2.setBounds(width * 3 / 4, height / 6, width / 4, height * 4 / 6);
-        buttons.setBounds(0, height * 5 / 6, width, height / 6);
+        player1.setBounds(0, height / 6, width / 4, height * 3 / 6);
+        player2.setBounds(width * 3 / 4, height / 6, width / 4, height * 3 / 6);
+        buttons.setBounds(0, height * 4 / 6, width, height * 2 / 6);
     }
 }

@@ -6,6 +6,7 @@ import java.io.File;
 public class Palette {
     public static final Color CLEAR = new Color(0, 0, 0, 0);
     public static final Color WHITE = Color.WHITE;
+    public static final Color BLACK = Color.BLACK;
     public static final Color SHIP_OK = new Color(23, 109, 41);
     public static final Color SHIP_SUNK = new Color(109, 23, 41);
     public static final Color SHIP_PLACE_OK = new Color(11, 246, 58);
