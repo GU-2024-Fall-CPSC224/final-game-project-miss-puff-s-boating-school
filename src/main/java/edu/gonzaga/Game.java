@@ -6,7 +6,7 @@ import edu.gonzaga.ships.Ship;
 /**
  * The main class that runs the game, handling state and transitions between panels.
  */
-public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, EndPanelCallbacks {
+public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, EndPanelCallbacks, SettingsPanelCallbacks {
     /**
      * The current state of the game.
      */
@@ -82,6 +82,7 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
     @Override
     public void introPanelOnSettings() {
         System.out.println("Going to settings panel...");
+        frame.setActivePanel( new SettingsPanel( this ) );
     }
 
     @Override
@@ -169,5 +170,12 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
         }
 
         return 0;
+    }
+
+    @Override
+    public void previousPanelOnCLoseSettings() {
+        System.out.println("Returning to intro panel...");
+        
+        frame.setActivePanel(new IntroPanel(this));
     }
 }

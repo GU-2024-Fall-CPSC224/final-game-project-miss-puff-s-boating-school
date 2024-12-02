@@ -6,6 +6,8 @@ package edu.gonzaga;
 public class Settings {
     private static final Settings instance = new Settings();
 
+    // ----------------------- ATTRIBUTES BEGIN HERE: -------------------------
+
     /**
      * Whether to hide ships on the board from the opponent.
      */
@@ -16,6 +18,11 @@ public class Settings {
      */
     public int turnLimit;
 
+    // ----------------------- METHODS BEGIN HERE: -------------------------
+
+    /**
+     * Settings() is the default constructor for our game.
+     */
     private Settings() {
         hideShipsOnBoard = true;
         turnLimit = 50;
