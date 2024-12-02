@@ -3,26 +3,17 @@ package edu.gonzaga.renderer;
 import javax.swing.*;
 
 public class IntroPanel extends JPanel {
-    public IntroPanel() {
+    private JTextField player1Name;
+    private JTextField player2Name;
+
+    public IntroPanel(IntroPanelCallbacks callbacks) {
         super();
 
         setLayout(new IntroLayout());
 
         createTitle();
         createPlayers();
-        createButtons();
-    }
-
-    private void start() {
-        firePropertyChange("start", null, null);
-    }
-
-    private void settings() {
-        firePropertyChange("settings", null, null);
-    }
-
-    private void quit() {
-        System.exit(0);
+        createButtons(callbacks);
     }
 
     private void createTitle() {
@@ -47,7 +38,7 @@ public class IntroPanel extends JPanel {
         player1Label.setAlignmentX(0.5f);
         player1Container.add(player1Label);
 
-        JTextField player1Name = new JTextField(20);
+        player1Name = new JTextField("Player 1", 20);
         player1Name.setMaximumSize(player1Name.getPreferredSize());
         player1Container.add(player1Name);
 
@@ -58,7 +49,7 @@ public class IntroPanel extends JPanel {
         player2Label.setAlignmentX(0.5f);
         player2Container.add(player2Label);
 
-        JTextField player2Name = new JTextField(20);
+        player2Name = new JTextField("Player 2", 20);
         player2Name.setMaximumSize(player2Name.getPreferredSize());
         player2Container.add(player2Name);
 
@@ -66,7 +57,7 @@ public class IntroPanel extends JPanel {
         add("player2", player2Container);
     }
 
-    private void createButtons() {
+    private void createButtons(IntroPanelCallbacks callbacks) {
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 
@@ -74,19 +65,21 @@ public class IntroPanel extends JPanel {
         startButton.setAlignmentX(0.5f);
         container.add(startButton);
 
-        startButton.addActionListener(e -> start());
+        startButton.addActionListener(e -> callbacks.introPanelOnStartGame(
+                player1Name.getText(),
+                player2Name.getText()));
 
         JButton settingsButton = new JButton("Settings");
         settingsButton.setAlignmentX(0.5f);
         container.add(settingsButton);
 
-        settingsButton.addActionListener(e -> settings());
+        settingsButton.addActionListener(e -> callbacks.introPanelOnSettings());
 
         JButton quitButton = new JButton("Quit");
         quitButton.setAlignmentX(0.5f);
         container.add(quitButton);
 
-        quitButton.addActionListener(e -> quit());
+        quitButton.addActionListener(e -> System.exit(0));
 
         add("buttons", container);
     }

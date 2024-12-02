@@ -1,34 +1,155 @@
 package edu.gonzaga.renderer;
 
 import javax.swing.*;
+
+import edu.gonzaga.Game;
+import edu.gonzaga.Player;
+
 import java.awt.*;
 
 public class Info extends JPanel {
-    public Info() {
-        super();
+    /*
+     * Holds the player names
+     */
+    Player player1;
+    Player player2;
+
+    JLabel gameTitle;
+
+    JPanel centerContainer;
+    JButton switchButton;
+    JLabel statusDisplayTop;
+    JLabel statusDisplayBottom;
+
+    private GamePanelCallbacks callbacks;
+    /**
+     * Is the screen being handed off to the other player?
+     */
+    private boolean isInSwitch = false;
+
+    /**
+     * Constructor for painting?
+     */
+    public Info(GamePanelCallbacks callbacks, Player player1, Player player2) {
+        super(new BorderLayout());
 
         setBackground(Color.BLACK);
+
+        this.callbacks = callbacks;
+        this.player1 = player1;
+        this.player2 = player2;
+
+        addGameTitle();
+        addCenter();
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void setGameState(Game.GameState state) {
+        switch (state) {
+            case PLAYER_1_SETUP -> setStatusText(player1.getName(), "Set up your ships.");
+            case PLAYER_2_SETUP -> setStatusText(player2.getName(), "Set up your ships.");
+            case PLAYER_1_TURN -> setStatusText(player1.getName(), "It's your turn.");
+            case PLAYER_2_TURN -> setStatusText(player2.getName(), "It's your turn.");
+            default -> {
+            }
+        }
+    }
 
-        g.setColor(Color.WHITE);
+    public void turnComplete() {
+        switchButton.setEnabled(true);
+        switchButton.setText("End turn");
+        setStatusText("Turn complete", "");
+    }
+
+    private void onSwitchButtonPressed() {
+        if (isInSwitch) {
+            switchButton.setEnabled(false);
+            switchButton.setText("Waiting...");
+            callbacks.onPlayerSwitched();
+        } else {
+            switchButton.setText("Press to start turn");
+            setStatusText("Hand off to", "other player");
+            callbacks.onHandoffStarted();
+        }
+
+        isInSwitch = !isInSwitch;
+    }
+
+    /**
+     * addGameTitle() Adds the BATTLESHIP (C) title to the top of the main game panel.
+     */
+    private void addGameTitle() {
+        gameTitle = new JLabel();
+
+        gameTitle.setText("BATTLESHIP");
         Font font = new Font("Arial", Font.PLAIN, 42);
-        g.setFont(font);
-        FontMetrics metrics = g.getFontMetrics(font);
+        gameTitle.setFont(font);
+        gameTitle.setForeground(Color.WHITE);
 
-        int x = (getWidth() - metrics.stringWidth("Battleship")) / 2;
+        gameTitle.setHorizontalAlignment(SwingConstants.CENTER);
 
-        g.drawString("Battleship", x, 40);
+        add(gameTitle, BorderLayout.NORTH);
+    }
 
-        font = new Font("Arial", Font.PLAIN, 32);
-        g.setFont(font);
-        metrics = g.getFontMetrics(font);
+    private void addCenter() {
+        centerContainer = new JPanel();
+        centerContainer.setOpaque(false);
+        centerContainer.setLayout(new BoxLayout(centerContainer, BoxLayout.Y_AXIS));
 
-        x = (getWidth() - metrics.stringWidth("_____'s Turn")) / 2;
+        addSwitchButton();
+        addStatusDisplay();
 
-        g.drawString("_____'s Turn", x, 100);
+        add(centerContainer, BorderLayout.CENTER);
+    }
+
+    private void addSwitchButton() {
+        switchButton = new JButton("Button");
+        switchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        switchButton.setEnabled(false);
+        switchButton.setText("Waiting...");
+        switchButton.addActionListener(e -> onSwitchButtonPressed());
+
+        Font font = new Font("Arial", Font.PLAIN, 32);
+        switchButton.setFont(font);
+        switchButton.setBackground(new Color(0, 0, 0, 0));
+        switchButton.setForeground(Color.WHITE);
+        switchButton.setFocusPainted(false);
+        switchButton.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Color.WHITE, 2),
+                        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+                )
+        );
+
+        centerContainer.add(Box.createRigidArea(new Dimension(0, 60)));
+        centerContainer.add(switchButton);
+    }
+
+    /**
+     * addStatusDisplayScreen() adds the "display screen", which will tell both players when to setup,
+     * who's turn it is, etc.
+     */
+    private void addStatusDisplay() {
+        statusDisplayTop = new JLabel();
+        statusDisplayBottom = new JLabel();
+
+        Font font = new Font("Arial", Font.PLAIN, 32);
+
+        statusDisplayTop.setFont(font);
+        statusDisplayTop.setForeground(Color.WHITE);
+        statusDisplayTop.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        centerContainer.add(Box.createRigidArea(new Dimension(0, 60)));
+        centerContainer.add(statusDisplayTop);
+
+        statusDisplayBottom.setFont(font);
+        statusDisplayBottom.setForeground(Color.WHITE);
+        statusDisplayBottom.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        centerContainer.add(statusDisplayBottom);
+    }
+
+    private void setStatusText(String top, String bottom) {
+        statusDisplayTop.setText(top);
+        statusDisplayBottom.setText(bottom);
     }
 }

@@ -26,4 +26,9 @@ public record Coordinate(int x, int y) implements Comparable<Coordinate> {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
 }

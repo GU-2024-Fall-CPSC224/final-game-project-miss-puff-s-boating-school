@@ -1,8 +1,8 @@
-package edu.gonzaga;
+package edu.gonzaga.ships;
 
 public class Carrier extends Ship{
     private final int length = 5; 
-    private shipType shipId = shipType.CARRIER;
+    private ShipType shipId = ShipType.CARRIER;
 
     public Carrier(int x, int y, boolean isVertical) {
         super(x, y, isVertical);
@@ -31,7 +31,7 @@ public class Carrier extends Ship{
         return length;
     }
     @Override
-    public shipType getType() {
+    public ShipType getType() {
         return shipId;
     }
    

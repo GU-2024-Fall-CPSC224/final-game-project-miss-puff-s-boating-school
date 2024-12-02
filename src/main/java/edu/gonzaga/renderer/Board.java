@@ -1,24 +1,23 @@
 package edu.gonzaga.renderer;
 
 import edu.gonzaga.Coordinate;
+import edu.gonzaga.ships.Ship;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.HashMap;
 
 public class Board extends JPanel {
     private static final int TOTAL_CELLS = 11;
-
 
     private final edu.gonzaga.Board model;
     private int gridCellSize;
     private int boardSize;
 
-    public edu.gonzaga.Ship ghostShip;
+    public boolean hideShips = false;
+    public Ship ghostShip;
+    public Coordinate ghostMarker;
 
     public Board(edu.gonzaga.Board model) {
         super();
@@ -35,14 +34,16 @@ public class Board extends JPanel {
         gridCellSize = Math.min(getWidth() / TOTAL_CELLS, getHeight() / TOTAL_CELLS);
         boardSize = gridCellSize * TOTAL_CELLS;
 
-        if (ghostShip != null) {
-            boolean valid = model.validateShipPlacement(ghostShip.getPosition(), ghostShip.isVertical(), ghostShip.getLength());
-
-            drawShip((Graphics2D) g, valid ? Color.GREEN : Color.RED, ghostShip);
+        for (Ship ship : model.getShips()) {
+            if (!hideShips || ship.getIsSunk()) {
+                drawShip((Graphics2D) g, Color.WHITE, ship);
+            }
         }
 
-        for (edu.gonzaga.Ship ship : model.getShips()) {
-            drawShip((Graphics2D) g, Color.WHITE, ship);
+        if (ghostShip != null) {
+            boolean valid = model.validateShipPlacement( ghostShip );
+
+            drawShip((Graphics2D) g, valid ? Color.GREEN : Color.RED, ghostShip);
         }
 
         drawGrid(g);
@@ -56,10 +57,20 @@ public class Board extends JPanel {
                 }
             }
         }
-    }
 
-    public int getGridCellSize() {
-        return gridCellSize;
+        if (ghostMarker != null) {
+            if (model.isMarked(ghostMarker)) {
+                g.setColor(new Color(255, 0, 0, 128));
+            } else {
+                g.setColor(new Color(0, 255, 0, 128));
+            }
+
+            g.fillRect(
+                    (ghostMarker.x() + 1) * gridCellSize,
+                    (ghostMarker.y() + 1) * gridCellSize,
+                    gridCellSize,
+                    gridCellSize);
+        }
     }
 
     public Coordinate getCellMouseIsOver() {
@@ -71,6 +82,11 @@ public class Board extends JPanel {
 
         int x = (int) Math.floor((double) mousePos.x / gridCellSize) - 1;
         int y = (int) Math.floor((double) mousePos.y / gridCellSize) - 1;
+
+        // Constraining the mouse to the board
+        if (x < 0 || x >= 10 || y < 0 || y >= 10) {
+            return null;
+        }
 
         return new Coordinate(x, y);
     }
@@ -98,7 +114,7 @@ public class Board extends JPanel {
         }
     }
 
-    private void drawShip(Graphics2D g, Color color, edu.gonzaga.Ship ship) {
+    private void drawShip(Graphics2D g, Color color, Ship ship) {
         int x = ship.getPosition().x() + 1;
         int y = ship.getPosition().y() + 1;
 
@@ -109,14 +125,14 @@ public class Board extends JPanel {
             g.translate(-gridCellSize, 0);
         }
 
-        BufferedImage img;
+        Image img;
 
         if (color == Color.RED) {
-            img = ImageBuffers.getInstance().getImage(ship.getType().name().toLowerCase() + "-red");
+            img = ImageBuffers.getInstance().getShipImage(ship.getType(), "red");
         } else if (color == Color.GREEN) {
-            img = ImageBuffers.getInstance().getImage(ship.getType().name().toLowerCase() + "-green");
+            img = ImageBuffers.getInstance().getShipImage(ship.getType(), "green");
         } else {
-            img = ImageBuffers.getInstance().getImage(ship.getType().name().toLowerCase());
+            img = ImageBuffers.getInstance().getShipImage(ship.getType(), null);
         }
 
         g.drawImage(img,
@@ -129,9 +145,10 @@ public class Board extends JPanel {
         g.setTransform(prevTransform);
     }
 
+
     private void drawMarker(Graphics g, int x, int y, boolean hit) {
-        BufferedImage hitImage = ImageBuffers.getInstance().getImage("hit");
-        BufferedImage missImage = ImageBuffers.getInstance().getImage("miss");
+        Image hitImage = ImageBuffers.getInstance().getImage("hit");
+        Image missImage = ImageBuffers.getInstance().getImage("miss");
 
         g.drawImage(hit ? hitImage : missImage,
                 x * gridCellSize,
