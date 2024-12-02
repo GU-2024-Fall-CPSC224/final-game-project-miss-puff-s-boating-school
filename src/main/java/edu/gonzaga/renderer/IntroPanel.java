@@ -38,7 +38,7 @@ public class IntroPanel extends JPanel {
         player1Label.setAlignmentX(0.5f);
         player1Container.add(player1Label);
 
-        player1Name = new JTextField(20);
+        player1Name = new JTextField("Player 1", 20);
         player1Name.setMaximumSize(player1Name.getPreferredSize());
         player1Container.add(player1Name);
 
@@ -49,7 +49,7 @@ public class IntroPanel extends JPanel {
         player2Label.setAlignmentX(0.5f);
         player2Container.add(player2Label);
 
-        player2Name = new JTextField(20);
+        player2Name = new JTextField("Player 2", 20);
         player2Name.setMaximumSize(player2Name.getPreferredSize());
         player2Container.add(player2Name);
 
