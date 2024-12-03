@@ -34,7 +34,7 @@ public class Palette {
         if (PRIMARY_FONT == null) {
             try {
                 PRIMARY_FONT = Font.createFont(Font.TRUETYPE_FONT, new File(
-                        "res/fonts/Geo-Regular.ttf"
+                        "res/fonts/Orbitron.ttf"
                 ));
             } catch (Exception e) {
                 System.out.println("Error loading font: " + e.getMessage());

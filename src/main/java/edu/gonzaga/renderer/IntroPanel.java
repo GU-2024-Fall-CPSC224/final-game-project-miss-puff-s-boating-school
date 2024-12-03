@@ -7,7 +7,7 @@ public class IntroPanel extends JPanel {
     private JTextField player1Name;
     private JTextField player2Name;
 
-    public IntroPanel(IntroPanelCallbacks callbacks) {
+    public IntroPanel(GameUICallbacks callbacks) {
         super();
 
         setLayout(new IntroLayout());
@@ -77,7 +77,7 @@ public class IntroPanel extends JPanel {
         add("players", container);
     }
 
-    private void createButtons(IntroPanelCallbacks callbacks) {
+    private void createButtons(GameUICallbacks callbacks) {
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setOpaque(false);

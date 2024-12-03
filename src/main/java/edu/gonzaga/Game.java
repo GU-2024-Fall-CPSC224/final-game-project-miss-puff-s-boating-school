@@ -3,10 +3,12 @@ package edu.gonzaga;
 import edu.gonzaga.renderer.*;
 import edu.gonzaga.ships.Ship;
 
+import java.util.Objects;
+
 /**
  * The main class that runs the game, handling state and transitions between panels.
  */
-public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, EndPanelCallbacks, SettingsPanelCallbacks {
+public class Game implements Runnable, GameUICallbacks {
     /**
      * The current state of the game.
      */
@@ -92,9 +94,27 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
 
     @Override
     public void onHandoffStarted() {
-        if ( (currentGameState == Game.GameState.PLAYER_1_TURN) || (currentGameState == Game.GameState.PLAYER_2_TURN) ) {
+        if ((currentGameState == Game.GameState.PLAYER_1_TURN) || (currentGameState == Game.GameState.PLAYER_2_TURN)) {
             roundsPlayed += 1;
         }
+
+        // For maximum round count setting: Check if all turns used.
+        // Since roundsPlayed is incremented every switch, the turn limit is doubled so we have the expected result
+        if (roundsPlayed >= Settings.getInstance().turnLimit * 2) {
+            System.out.println("Round Limit reached. Moving to end screen.");
+
+            // The winner is determined by whoever has the most hits on the other's ships.
+            if (leftBoard.getTotalHits() < rightBoard.getTotalHits()) {
+                frame.setActivePanel(new EndPanel(this, player1));
+            } else if (leftBoard.getTotalHits() > rightBoard.getTotalHits()) {
+                frame.setActivePanel(new EndPanel(this, player2));
+            } else {
+                frame.setActivePanel(new EndPanel(this, null));
+            }
+
+            return;
+        }
+
         gamePanel.onHandoffStarted();
     }
 
@@ -113,7 +133,8 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
                 setGameState(GameState.PLAYER_2_TURN);
                 gamePanel.takeAction();
             }
-            default -> {}
+            default -> {
+            }
         }
     }
 
@@ -131,21 +152,7 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
         shipsPlaced = 0;
 
         System.out.println("All ships placed.");
-
-        // We either have to switch to the next player's setup phase, or to the turns phase
-        if ((currentGameState == GameState.PLAYER_2_SETUP)) {
-            gamePanel.turnComplete();
-
-//            setGameState(GameState.PLAYER_1_TURN);
-//
-//            gamePanel.takeAction();
-        }
-        if (currentGameState == GameState.PLAYER_1_SETUP) {
-            gamePanel.turnComplete();
-//            setGameState(GameState.PLAYER_2_SETUP);
-//
-//            gamePanel.placeShip(Ship.ShipType.values()[shipsPlaced]);
-        }
+        gamePanel.turnComplete();
     }
 
     @Override
@@ -159,48 +166,14 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
             frame.setActivePanel(new EndPanel(this, player1));
             return;
         }
-        // For maximum round count setting: Check if all turns used.
-        if ( roundsPlayed > Settings.getInstance().turnLimit ) {
-            System.out.println("Round Limit reached. Moving to end screen.");
-            // The winner is determined by whoever has the most hits on the other's ships.
-            // Check if player 1 wins:
-            if ( leftBoard.getTotalHits() < rightBoard.getTotalHits() ) {
-                frame.setActivePanel(new EndPanel(this, player1));
-                return;
-            }
-            // Check for a draw.
-            if ( leftBoard.getTotalHits() == rightBoard.getTotalHits() ) {
-                frame.setActivePanel(new EndPanel(this, null ));
-                return;
-            }
-            // Otherwise, player 2 wins:
-            else {
-                frame.setActivePanel(new EndPanel(this, player2));
-                return;
-            }
-        }
 
         gamePanel.turnComplete();
-
-        // Check whose turn it is, and swap the game state to the other player, switching the turn
-        if (currentGameState == Game.GameState.PLAYER_1_TURN) {
-
-//            setGameState(Game.GameState.PLAYER_2_TURN);
-//            gamePanel.takeAction();
-        } else {
-//            setGameState(Game.GameState.PLAYER_1_TURN);
-//            gamePanel.takeAction();
-        }
-    }
-
-    @Override
-    public void endPanelOnRestart() {
-        System.out.println("Restarting game...");
     }
 
     @Override
     public void endPanelOnMainMenu() {
         System.out.println("Returning to main menu...");
+        frame.setActivePanel(new IntroPanel(this));
     }
 
     /**
@@ -215,7 +188,7 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
     }
 
     @Override
-    public void previousPanelOnCLoseSettings() {
+    public void settingsPanelOnClose() {
         System.out.println("Returning to intro panel...");
 
         frame.setActivePanel(new IntroPanel(this));

@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
     private Game.GameState gameState;
 
-    private GamePanelCallbacks callbacks;
+    private GameUICallbacks callbacks;
 
     private boolean placingShip;
     private Ship.ShipType currentShipType;
@@ -37,7 +37,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener {
 
     private Action rotateShipAction;
 
-    public GamePanel(GamePanelCallbacks callbacks,
+    public GamePanel(GameUICallbacks callbacks,
                      edu.gonzaga.Board leftBoardModel,
                      edu.gonzaga.Board rightBoardModel,
                      edu.gonzaga.Player player1,
