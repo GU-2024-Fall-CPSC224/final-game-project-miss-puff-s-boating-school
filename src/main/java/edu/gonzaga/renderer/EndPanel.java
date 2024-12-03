@@ -19,7 +19,14 @@ public class EndPanel extends JPanel {
         endLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(endLabel, BorderLayout.NORTH);
 
-        JLabel winnerLabel = new JLabel(winner.getName() + " wins!");
+        JLabel winnerLabel = new JLabel();
+        // Check for a draw: Neither player wins.
+        if ( winner == null ) {
+           winnerLabel.setText( "DRAW" );
+        }
+        else {
+            winnerLabel.setText( winner.getName() + " wins!" );
+        }
         winnerLabel.setForeground(Color.WHITE);
         winnerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         add(winnerLabel, BorderLayout.CENTER);

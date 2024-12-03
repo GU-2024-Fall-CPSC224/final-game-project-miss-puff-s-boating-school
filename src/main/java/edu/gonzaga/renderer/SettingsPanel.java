@@ -41,12 +41,6 @@ public class SettingsPanel extends JPanel {
 
         // Add maximum round count setting.
         addMaximumRoundCountSetting();
-
-        // Add Button 3:
-        JCheckBox turnTimer = new JCheckBox();
-        turnTimer.setText("Toggle turn timer");
-        this.add(turnTimer);
-
     }
 
 
