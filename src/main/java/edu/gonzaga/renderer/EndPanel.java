@@ -9,7 +9,7 @@ import java.awt.*;
  * The JPanel that is displayed when the game is over. Contains game statistics and buttons to restart or quit.
  */
 public class EndPanel extends JPanel {
-    public EndPanel(EndPanelCallbacks callbacks, Player winner) {
+    public EndPanel(GameUICallbacks callbacks, Player winner) {
         super(new BorderLayout());
 
         setBackground(Color.BLACK);

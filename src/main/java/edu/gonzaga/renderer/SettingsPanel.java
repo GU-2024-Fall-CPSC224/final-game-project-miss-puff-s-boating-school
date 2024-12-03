@@ -21,7 +21,7 @@ public class SettingsPanel extends JPanel {
     /**
      * settingsPanel() is the constructor for the settings panel window.
      */
-    public SettingsPanel(SettingsPanelCallbacks callbacks) {
+    public SettingsPanel(GameUICallbacks callbacks) {
         super();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -33,7 +33,7 @@ public class SettingsPanel extends JPanel {
         // Add action listener to the exit button.
         exitButton.addActionListener(e -> {
             updateSettings();
-            callbacks.previousPanelOnCLoseSettings();
+            callbacks.settingsPanelOnClose();
         });
 
         // Add ship visibility setting.

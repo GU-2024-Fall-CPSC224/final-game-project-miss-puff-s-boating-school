@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * The main class that runs the game, handling state and transitions between panels.
  */
-public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, EndPanelCallbacks, SettingsPanelCallbacks {
+public class Game implements Runnable, GameUICallbacks {
     /**
      * The current state of the game.
      */
@@ -192,7 +192,7 @@ public class Game implements Runnable, IntroPanelCallbacks, GamePanelCallbacks, 
     }
 
     @Override
-    public void previousPanelOnCLoseSettings() {
+    public void settingsPanelOnClose() {
         System.out.println("Returning to intro panel...");
 
         frame.setActivePanel(new IntroPanel(this));

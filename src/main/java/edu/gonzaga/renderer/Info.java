@@ -21,7 +21,7 @@ public class Info extends JPanel {
     JLabel statusDisplayTop;
     JLabel statusDisplayBottom;
 
-    private GamePanelCallbacks callbacks;
+    private GameUICallbacks callbacks;
     /**
      * Is the screen being handed off to the other player?
      */
@@ -30,7 +30,7 @@ public class Info extends JPanel {
     /**
      * Constructor for painting?
      */
-    public Info(GamePanelCallbacks callbacks, Player player1, Player player2) {
+    public Info(GameUICallbacks callbacks, Player player1, Player player2) {
         super(new BorderLayout());
 
         setBackground(Color.BLACK);
