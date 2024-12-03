@@ -46,32 +46,35 @@ public class IntroPanel extends JPanel {
     }
 
     private void createPlayers() {
-        JPanel player1Container = new JPanel();
-        player1Container.setLayout(new BoxLayout(player1Container, BoxLayout.Y_AXIS));
-        player1Container.setOpaque(false);
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setOpaque(false);
 
-        JLabel player1Label = new JLabel("Player 1");
+        JLabel player1Label = new JLabel("Player 1 Name");
+        player1Label.setFont(Palette.getPrimaryFont(32));
+        player1Label.setForeground(Palette.WHITE);
         player1Label.setAlignmentX(0.5f);
-        player1Container.add(player1Label);
+        container.add(player1Label);
 
         player1Name = new JTextField("Player 1", 20);
+        player1Name.setFont(Palette.getPrimaryFont(24));
         player1Name.setMaximumSize(player1Name.getPreferredSize());
-        player1Container.add(player1Name);
+        container.add(player1Name);
 
-        JPanel player2Container = new JPanel();
-        player2Container.setLayout(new BoxLayout(player2Container, BoxLayout.Y_AXIS));
-        player2Container.setOpaque(false);
+        container.add(Box.createVerticalGlue());
 
-        JLabel player2Label = new JLabel("Player 2");
+        JLabel player2Label = new JLabel("Player 2 Name");
+        player2Label.setFont(Palette.getPrimaryFont(32));
+        player2Label.setForeground(Palette.WHITE);
         player2Label.setAlignmentX(0.5f);
-        player2Container.add(player2Label);
+        container.add(player2Label);
 
         player2Name = new JTextField("Player 2", 20);
+        player2Name.setFont(Palette.getPrimaryFont(24));
         player2Name.setMaximumSize(player2Name.getPreferredSize());
-        player2Container.add(player2Name);
+        container.add(player2Name);
 
-        add("player1", player1Container);
-        add("player2", player2Container);
+        add("players", container);
     }
 
     private void createButtons(IntroPanelCallbacks callbacks) {

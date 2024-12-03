@@ -4,8 +4,7 @@ import java.awt.*;
 
 public class IntroLayout implements LayoutManager {
     private Component title;
-    private Component player1;
-    private Component player2;
+    private Component players;
     private Component buttons;
 
     @Override
@@ -14,11 +13,8 @@ public class IntroLayout implements LayoutManager {
             case "title":
                 title = comp;
                 break;
-            case "player1":
-                player1 = comp;
-                break;
-            case "player2":
-                player2 = comp;
+            case "players":
+                players = comp;
                 break;
             case "buttons":
                 buttons = comp;
@@ -46,8 +42,7 @@ public class IntroLayout implements LayoutManager {
         int height = parent.getHeight() - insets.top - insets.bottom;
 
         title.setBounds(0, 0, width, height / 6);
-        player1.setBounds(0, height / 6, width / 4, height * 3 / 6);
-        player2.setBounds(width * 3 / 4, height / 6, width / 4, height * 3 / 6);
+        players.setBounds(width / 4, height * 2 / 6, width * 2 / 4, height / 6);
         buttons.setBounds(0, height * 4 / 6, width, height * 2 / 6);
     }
 }
