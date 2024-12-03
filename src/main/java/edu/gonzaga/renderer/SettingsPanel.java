@@ -1,95 +1,112 @@
 package edu.gonzaga.renderer;
 
-import edu.gonzaga.Player;
 import edu.gonzaga.Settings;
 
 import javax.swing.*;
 import java.awt.*;
 
-/*
- * The Settings Panel provides the players with an additional userface where they can adjust various aspects of gameplay,
- * including ship visibility, turn timers, special abilities, and volume.
+/**
+ * The JPanel that is displayed when the settings button is clicked. Contains settings for the game.
  */
 public class SettingsPanel extends JPanel {
-    private JPanel shipVisibilitySetting;
-    private JCheckBox visibilityToggle;
-
-    private JPanel roundCountSetting;
-    private JLabel roundCountLabel;
-    private JTextField roundCountTextField;
+    private JCheckBox hideShipsToggle;
+    private JTextField roundLimitField;
+    private JButton exitButton;
 
     /**
      * settingsPanel() is the constructor for the settings panel window.
      */
     public SettingsPanel(GameUICallbacks callbacks) {
-        super();
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        super(new BorderLayout());
 
-        // Add Exit settings button:
-        JButton exitButton = new JButton();
-        exitButton.setText("Exit Settings");
-        this.add(exitButton);
+        setBackground(Palette.BLACK);
 
-        // Add action listener to the exit button.
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setOpaque(false);
+
+        container.add(Box.createRigidArea(new Dimension(0, 30)));
+        addHideShips(container);
+        container.add(Box.createRigidArea(new Dimension(0, 30)));
+        addRoundLimit(container);
+        container.add(Box.createRigidArea(new Dimension(0, 30)));
+        addExit(container);
+
         exitButton.addActionListener(e -> {
             updateSettings();
             callbacks.settingsPanelOnClose();
         });
 
-        // Add ship visibility setting.
-        addShipVisibilitySetting();
-
-        // Add maximum round count setting.
-        addMaximumRoundCountSetting();
+        add(container, BorderLayout.NORTH);
     }
 
+    private void addHideShips(JPanel outer) {
+        JPanel inner = new JPanel();
+        inner.setOpaque(false);
 
-    /*
-     * addShipVisibilitySetting() creates a new Jpanel, which stores the settings toggle for
-     * ship visibility to all players.
-     */
-    private void addShipVisibilitySetting() {
-        shipVisibilitySetting = new JPanel();
+        JLabel label = new JLabel("Hide your ships from your opponent");
+        label.setForeground(Palette.WHITE);
+        label.setFont(Palette.getPrimaryFont(32));
+        inner.add(label);
 
-        visibilityToggle = new JCheckBox("Hide Ships", Settings.getInstance().hideShipsOnBoard);
-        shipVisibilitySetting.add(visibilityToggle);
-        // Add the visibility setting panel to the main panel.
-        add(shipVisibilitySetting);
+        hideShipsToggle = new JCheckBox();
+        hideShipsToggle.setSelected(Settings.getInstance().hideShipsOnBoard);
+        inner.add(hideShipsToggle);
+
+        outer.add(inner);
     }
 
+    private void addRoundLimit(JPanel outer) {
+        JPanel inner = new JPanel();
+        inner.setOpaque(false);
+
+        JLabel label = new JLabel("Round limit");
+        label.setForeground(Palette.WHITE);
+        label.setFont(Palette.getPrimaryFont(32));
+        inner.add(label);
+
+        roundLimitField = new JTextField(String.valueOf(Settings.getInstance().turnLimit), 3);
+
+        inner.add(roundLimitField);
+
+        outer.add(inner);
+    }
+
+    private void addExit(JPanel outer) {
+        exitButton = new JButton("Save and Exit");
+        exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        exitButton.setFont(Palette.getPrimaryFont(32));
+        exitButton.setBackground(Palette.CLEAR);
+        exitButton.setForeground(Palette.WHITE);
+        exitButton.setFocusPainted(false);
+        exitButton.setBorder(
+                BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(Palette.WHITE, 2),
+                        BorderFactory.createEmptyBorder(10, 20, 10, 20)
+                )
+        );
+
+        outer.add(exitButton);
+    }
 
     /**
-     * addMaximumTurnCountSetting() creates a text field with a changable number, which
-     * determines how many rounds a game will last.
+     * Updates settings based on the fields set in the panel.
      */
-    private void addMaximumRoundCountSetting() {
-        roundCountSetting = new JPanel();
-
-        roundCountLabel = new JLabel( "Max Round Count:" );
-        roundCountSetting.add( roundCountLabel );
-
-        roundCountTextField = new JTextField( Integer.toString( Settings.getInstance().turnLimit ) );
-        roundCountSetting.add( roundCountTextField );
-
-        // Add the maximum round cap to the settings panel.
-        add(roundCountSetting);
-    }
-
-    /*
-     * updateSettings() runs through all the toggled settings in the settings panel, updating any chages detected.
-     */
-    public void updateSettings() {
-        // Get an instance of the settings.
+    private void updateSettings() {
         Settings currentSettings = Settings.getInstance();
         
-        // Check if the ship visibility toggle has changed:
-        currentSettings.hideShipsOnBoard = this.visibilityToggle.isSelected();
+        // Hide ships
+        currentSettings.hideShipsOnBoard = this.hideShipsToggle.isSelected();
         System.out.println("Ship visibility: " + currentSettings.hideShipsOnBoard);
 
-        // Check if the round count has been changed:
-        currentSettings.turnLimit = Integer.valueOf( this.roundCountTextField.getText().trim() );
-        System.out.println("Maximum turn count: " + roundCountTextField );
+        // Round / Turn limit
+        try {
+            int roundLimit = Integer.parseInt(this.roundLimitField.getText().trim());
 
+            currentSettings.turnLimit = roundLimit;
+            System.out.println("Round limit: " + roundLimit);
+        } catch (Exception e) {
+            System.out.println("Unable to set round limit: " + e);
+        }
     }
-
 }
