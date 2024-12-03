@@ -92,15 +92,16 @@ public class Board extends JPanel {
     }
 
     private void drawGrid(Graphics g) {
-        g.setColor(Color.WHITE);
-
-        Font font = new Font("Arial", Font.PLAIN, 32);
-        g.setFont(font);
-        FontMetrics metrics = g.getFontMetrics(font);
+        g.setFont(Palette.getTitleFont(32));
+        FontMetrics metrics = g.getFontMetrics(Palette.getTitleFont(32));
 
         for (int i = 1; i < TOTAL_CELLS; i++) {
+            g.setColor(Palette.SHIP_OK);
+
             g.drawLine(0, i * gridCellSize, boardSize, i * gridCellSize);
             g.drawLine(i * gridCellSize, 0, i * gridCellSize, boardSize);
+
+            g.setColor(Palette.WHITE);
 
             String letterString = String.valueOf((char) (i + 64));
             int x = i * gridCellSize + (gridCellSize - metrics.stringWidth(letterString)) / 2;

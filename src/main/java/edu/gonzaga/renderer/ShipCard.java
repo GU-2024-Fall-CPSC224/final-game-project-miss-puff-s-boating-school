@@ -9,7 +9,8 @@ import java.awt.*;
  * A card that displays a ship and its information.
  */
 public class ShipCard extends JPanel {
-    /** The ship to display. */
+    public static final int HEIGHT = 130;
+
     private final Ship ship;
 
     public ShipCard(Ship ship) {
@@ -18,14 +19,20 @@ public class ShipCard extends JPanel {
         this.ship = ship;
 
         if (ship.getIsSunk()) {
-            setBackground(Color.RED);
+            setBackground(Palette.SHIP_SUNK);
         } else {
-            setBackground(Color.GREEN);
+            setBackground(Palette.SHIP_OK);
         }
 
-        setMinimumSize(new java.awt.Dimension(0, 70));
+        setBorder(BorderFactory.createLineBorder(Palette.WHITE, 1));
 
-        JLabel nameLabel = new JLabel(ship.toString());
-        add(nameLabel);
+        setMinimumSize(new java.awt.Dimension(0, HEIGHT));
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        g.drawImage(ImageBuffers.getInstance().getShipSideImage(ship.getType()), 0, 0, null);
     }
 }

@@ -33,6 +33,10 @@ public class ImageBuffers
         return imageBuffers.get(key);
     }
 
+    public Image getShipSideImage(Ship.ShipType type) {
+        return imageBuffers.get(type.name().toLowerCase() + "-side");
+    }
+
     private ImageBuffers() {
         imageBuffers = new HashMap<>();
 
@@ -43,6 +47,8 @@ public class ImageBuffers
         try {
             imageBuffers.put("hit", ImageIO.read(new File("res/board/hit.png")));
             imageBuffers.put("miss", ImageIO.read(new File("res/board/miss.png")));
+            imageBuffers.put("intro-splash", ImageIO.read(new File("res/intro-splash.png")));
+            imageBuffers.put("ending-splash", ImageIO.read(new File("res/ending-splash.png")));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,8 +59,11 @@ public class ImageBuffers
             BufferedImage base = ImageIO.read(new File("res/ships/" + name + ".png"));
 
             imageBuffers.put(name, tint(base, Color.WHITE));
-            imageBuffers.put(name + "-red", tint(base, Color.RED));
-            imageBuffers.put(name + "-green", tint(base, Color.GREEN));
+            imageBuffers.put(name + "-red", tint(base, Palette.SHIP_PLACE_BAD));
+            imageBuffers.put(name + "-green", tint(base, Palette.SHIP_PLACE_OK));
+
+            BufferedImage side = ImageIO.read(new File("res/ships/" + name + "-side.png"));
+            imageBuffers.put(name + "-side", side);
         } catch (Exception e) {
             e.printStackTrace();
         }

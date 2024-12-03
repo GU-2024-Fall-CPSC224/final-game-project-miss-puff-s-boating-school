@@ -20,10 +20,8 @@ public class Ships extends JScrollPane implements PropertyChangeListener {
         this.board = board;
 
         container = new JPanel();
-        container.setLayout(new GridLayout(0, 1, 0, 10));
+        container.setLayout(new GridLayout(0, 1));
         container.setBackground(Color.BLACK);
-
-        updateShips();
 
         setViewportView(container);
     }
@@ -43,6 +41,6 @@ public class Ships extends JScrollPane implements PropertyChangeListener {
 
         int numShips = board.getShips().length;
 
-        container.setPreferredSize(new Dimension(0, numShips * 70 + (numShips - 1) * 10));
+        container.setPreferredSize(new Dimension(0, numShips * ShipCard.HEIGHT));
     }
 }
