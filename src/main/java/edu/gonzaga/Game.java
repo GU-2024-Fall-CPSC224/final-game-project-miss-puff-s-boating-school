@@ -171,13 +171,9 @@ public class Game implements Runnable, GameUICallbacks {
     }
 
     @Override
-    public void endPanelOnRestart() {
-        System.out.println("Restarting game...");
-    }
-
-    @Override
     public void endPanelOnMainMenu() {
         System.out.println("Returning to main menu...");
+        frame.setActivePanel(new IntroPanel(this));
     }
 
     /**
